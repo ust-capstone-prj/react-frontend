@@ -5,6 +5,8 @@ import './App.css'
 import Login from './Components/Login/Login'
 import Landing from './Components/Landing'
 import { Routes, Route, BrowserRouter } from'react-router-dom'
+import Register from './Components/Register/Register'
+import About from './Components/About'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -17,6 +19,8 @@ function App() {
     <Routes>
       <Route exact path="/" element={<Landing />} />
       <Route exact path="/login" element={<Login />} />
+      <Route exact path="/register" element={<Register />} />
+      <Route path="/about/*" element={<About />} />
     </Routes>
     </BrowserRouter>
     

@@ -61,8 +61,9 @@ const Landing = () => {
     <div style={landingStyle}>
       <header style={headerStyle}>
         <nav style={navStyle}>
-        <Link style={linkStyle} to="/login">Login</Link>
-          <a style={linkStyle} href="#about">About</a>
+          <Link style={linkStyle} to="/login">Login</Link>
+          <Link style={linkStyle} to="/register">Register</Link>
+          <Link style={linkStyle} to="/about">About</Link>
           <a style={linkStyle} href="#services">Our Services</a>
           <a style={linkStyle} href="#feedback">Feedback</a>
         </nav>
