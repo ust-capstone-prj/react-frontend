@@ -7,6 +7,9 @@ import Landing from './Components/Landing'
 import { Routes, Route, BrowserRouter } from'react-router-dom'
 import Register from './Components/Register/Register'
 import About from './Components/About'
+import Contact from './Components/Contact'
+import ProjectType from './Components/ProjectType/ProjectType'
+import ProjectTypeCategory from './Components/ProjectTypeCategory/ProjectTypeCategory'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -21,6 +24,9 @@ function App() {
       <Route exact path="/login" element={<Login />} />
       <Route exact path="/register" element={<Register />} />
       <Route path="/about/*" element={<About />} />
+      <Route path="/contact" element={<Contact />} />
+      <Route path="/project-type" element={<ProjectType />} />
+      <Route path="/project-category" element={<ProjectTypeCategory />} />
     </Routes>
     </BrowserRouter>
     
