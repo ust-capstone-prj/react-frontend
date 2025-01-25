@@ -1,7 +1,9 @@
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import './Register.css';
 
 const Register = () => {
+    const navigate = useNavigate();
     // Initialize state for form data
     const [formData, setFormData] = useState({
         firstName: '',
@@ -27,6 +29,10 @@ const Register = () => {
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log('Registration attempted with:', formData);
+        
+        // Add registration logic here
+        // After successful registration:
+        navigate('/login');
     };
 
     return (

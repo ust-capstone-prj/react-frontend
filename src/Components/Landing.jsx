@@ -63,9 +63,10 @@ const Landing = () => {
         <nav style={navStyle}>
           <Link style={linkStyle} to="/login">Login</Link>
           <Link style={linkStyle} to="/register">Register</Link>
-          <Link style={linkStyle} to="/about">About</Link>
-          <a style={linkStyle} href="#services">Our Services</a>
-          <a style={linkStyle} href="#feedback">Feedback</a>
+          <Link style={linkStyle} to="/about">About And Services</Link>
+          <Link style={linkStyle} to="/contact">Contact</Link>
+          {/* <a style={linkStyle} href="#services">Our Services</a> */}
+          {/* <a style={linkStyle} href="#feedback">Feedback</a> */}
         </nav>
       </header>
       <div style={overlayStyle}></div>
