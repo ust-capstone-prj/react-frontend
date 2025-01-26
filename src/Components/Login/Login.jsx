@@ -25,11 +25,52 @@ const Login = () => {
         e.preventDefault();
         // Add your login logic here
         console.log('Login attempted with:', formData);
-        
-        // Navigate to ProjectType if user is a contractor
-        if (formData.userType === 'contractor') {
-            navigate('/project-type');
+
+        const requestBody = {
+            username: formData.username,
+            password: formData.password
         }
+        console.log(JSON.stringify(requestBody))
+
+        fetch("http://localhost:8060/api/auth/validate/user", {
+            method:"POST",
+            headers:{
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(requestBody)
+        })
+        .then((response)=>{
+            if(!response.ok){
+                alert("Login Failed")
+                throw new Error("Login Failed");
+            }
+            return response.json();
+        })
+        .then((data)=>{
+            console.log("Response Data:", data);
+            const {username, roleName, token} = data;
+            localStorage.setItem("authToken", token);
+
+            if(roleName == "CONTRACTOR")
+            {
+                console.log("Logged in as Contractor")
+                navigate('/project-type')
+            }
+            else if(roleName == "CLIENT")
+            {
+                //navigate to client dashboard
+                alert("Logged in as Client")
+            }
+            else
+            {
+                console.error("Unknown role:",roleName);
+            }
+        })
+
+        // Navigate to ProjectType if user is a contractor
+        // if (formData.userType === 'contractor') {
+        //     navigate('/project-type');
+        // }
     };
 
     // Handle clearing the form
@@ -45,11 +86,11 @@ const Login = () => {
         <div className="login-container">
             <form className="login-form" onSubmit={handleSubmit}>
                 <h2 className="login-title">
-                    <i className="fas fa-hard-hat"></i> Construction Portal
+                    <i className="fas fa-hard-hat"></i> Login Portal
                 </h2>
-                
+
                 <div className="form-group">
-                    <label>User Type</label>
+                    <label>Login as</label>
                     <div className="radio-group">
                         <label>
                             <input
@@ -65,11 +106,11 @@ const Login = () => {
                             <input
                                 type="radio"
                                 name="userType"
-                                value="homeowner"
-                                checked={formData.userType === 'homeowner'}
+                                value="client"
+                                checked={formData.userType === 'client'}
                                 onChange={handleChange}
                             />
-                            Home Owner
+                            Client
                         </label>
                     </div>
                 </div>
