@@ -1,0 +1,162 @@
+.templates-container {
+    min-height: 100vh;
+    padding: 2rem;
+    background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+}
+
+.templates-title {
+    text-align: center;
+    color: #34495e;
+    font-size: 2.8rem;
+    margin-bottom: 2rem;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+    animation: glowText 2s infinite;
+}
+
+.create-template-btn {
+    display: block;
+    margin: 2rem auto;
+    padding: 1.2rem 2.5rem;
+    background: #6c5ce7;
+    color: white;
+    border: none;
+    border-radius: 12px;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+}
+
+.create-template-btn:hover {
+    background: #5b4ccd;
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(108, 92, 231, 0.4);
+}
+
+.template-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(8px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeInBlur 0.4s ease-out;
+}
+
+.template-form {
+    background: white;
+    padding: 2.5rem;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 550px;
+    animation: swingIn 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.form-group input {
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #a8edea;
+    border-radius: 10px;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    border-color: #6c5ce7;
+    box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.2);
+    outline: none;
+}
+
+.templates-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    gap: 2.5rem;
+    padding: 2rem 0;
+}
+
+.template-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    animation: slideUpFade 0.6s ease-out forwards;
+}
+
+.template-card:hover {
+    transform: translateY(-10px) rotate(2deg);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+/* New Animations */
+@keyframes glowText {
+    0% { text-shadow: 0 0 5px rgba(108, 92, 231, 0.5); }
+    50% { text-shadow: 0 0 20px rgba(108, 92, 231, 0.8); }
+    100% { text-shadow: 0 0 5px rgba(108, 92, 231, 0.5); }
+}
+
+@keyframes swingIn {
+    0% { 
+        transform: rotate(-10deg) scale(0.5); 
+        opacity: 0; 
+    }
+    100% { 
+        transform: rotate(0deg) scale(1); 
+        opacity: 1; 
+    }
+}
+
+@keyframes slideUpFade {
+    0% { 
+        opacity: 0;
+        transform: translateY(100px) scale(0.8);
+    }
+    100% { 
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* Hover Effects */
+.template-image {
+    position: relative;
+    overflow: hidden;
+}
+
+.template-image::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(45deg, rgba(108, 92, 231, 0.3), transparent);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+.template-card:hover .template-image::after {
+    opacity: 1;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .templates-container {
+        padding: 1rem;
+    }
+
+    .templates-title {
+        font-size: 2.2rem;
+    }
+
+    .template-form {
+        padding: 1.5rem;
+        width: 95%;
+    }
+}

@@ -8,6 +8,9 @@ const Templates1 = () => {
         variationName: '',
         baseCost: '',
         duration: '',
+        materialCostPercent: '',
+        laborCostPercent: '',
+        profitPercent: ''
     });
     const [isFormVisible, setIsFormVisible] = useState(false);
 
@@ -24,13 +27,31 @@ const Templates1 = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setNewTemplate(prev => ({ ...prev, [name]: value }));
+        setNewTemplate(prev => {
+            const updatedTemplate = { ...prev, [name]: value };
+            
+            // Calculate total percentage for cost fields
+            const totalPercentage = 
+                Number(updatedTemplate.materialCostPercent || 0) +
+                Number(updatedTemplate.laborCostPercent || 0) +
+                Number(updatedTemplate.profitPercent || 0);
+
+            // If total exceeds 100%, revert the change
+            if (totalPercentage > 100 && 
+                (name === 'materialCostPercent' || 
+                 name === 'laborCostPercent' || 
+                 name === 'profitPercent')) {
+                return prev;
+            }
+
+            return updatedTemplate;
+        });
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
         setTemplates(prev => [...prev, { ...newTemplate, id: Date.now() }]);
-        setNewTemplate({ image: '', variationName: '', baseCost: '', duration: '' });
+        setNewTemplate({ image: '', variationName: '', baseCost: '', duration: '', materialCostPercent: '', laborCostPercent: '', profitPercent: '' });
         setIsFormVisible(false);
     };
 
@@ -93,6 +114,45 @@ const Templates1 = () => {
                             />
                         </div>
 
+                        <div className="form-group">
+                            <label>Material Cost (%)</label>
+                            <input 
+                                type="number"
+                                name="materialCostPercent"
+                                value={newTemplate.materialCostPercent}
+                                onChange={handleInputChange}
+                                min="0"
+                                max="100"
+                                required
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Labor Cost (%)</label>
+                            <input 
+                                type="number"
+                                name="laborCostPercent"
+                                value={newTemplate.laborCostPercent}
+                                onChange={handleInputChange}
+                                min="0"
+                                max="100"
+                                required
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Profit (%)</label>
+                            <input 
+                                type="number"
+                                name="profitPercent"
+                                value={newTemplate.profitPercent}
+                                onChange={handleInputChange}
+                                min="0"
+                                max="100"
+                                required
+                            />
+                        </div>
+
                         <div className="form-buttons">
                             <button type="submit">Upload Template</button>
                             <button 
@@ -117,6 +177,9 @@ const Templates1 = () => {
                             <h3>{template.variationName}</h3>
                             <p>Base Cost: ₹{template.baseCost}</p>
                             <p>Duration: {template.duration} days</p>
+                            <p>Material Cost: {template.materialCostPercent}%</p>
+                            <p>Labor Cost: {template.laborCostPercent}%</p>
+                            <p>Profit: {template.profitPercent}%</p>
                         </div>
                     </div>
                 ))}
