@@ -11,9 +11,8 @@ const Register = () => {
         email: '',
         username: '',
         password: '',
-        userType: 'homeowner', // default value
+        userType: '1', // default value
         companyName: '',
-        licenseNumber: ''
     });
 
     // Handle input changes
@@ -28,11 +27,63 @@ const Register = () => {
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Registration attempted with:', formData);
-        
-        // Add registration logic here
-        // After successful registration:
-        navigate('/login');
+        console.log('Registration attempted with FormData:', formData);
+
+        const requestBody1 = {
+            username: formData.username,
+            password: formData.password,
+            roleId: formData.userType
+        }
+        console.log(requestBody1)
+
+        fetch("http://localhost:8060/api/auth/register", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody1)
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    alert("Registration Failed")
+                    throw new Error("Registration Failed");
+                }
+                return response.json();
+            })
+            .then((data) => {
+                console.log('Response Data: ', data)
+                const { userId, username, password, roleId } = data;
+
+                const requestbody2 = {
+                    userInfoId: data.userId,
+                    userFirstName: formData.firstName,
+                    userLastName: formData.lastName,
+                    userEmail: formData.email,
+                    userCompany: formData.companyName
+                }
+
+                console.log("Request Body 2: ", requestbody2)
+                fetch("http://localhost:8060/api/userdetails", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestbody2)
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            alert("Failed to add user details")
+                            throw new Error("Failed to add user details");
+                        }
+                        return response.json();
+                    })
+                    .then((data) => {
+                        // console.log(data)
+                        console.log("successfully registered user.")
+                        alert("Registration Successful. Please Login")
+                        navigate('/login')
+                    })
+            })
     };
 
     return (
@@ -51,7 +102,7 @@ const Register = () => {
                         value={formData.firstName}
                         onChange={handleChange}
                         required
-                        placeholder="Enter your first name"
+                        placeholder="Enter your First Name"
                     />
                 </div>
 
@@ -64,7 +115,7 @@ const Register = () => {
                         value={formData.lastName}
                         onChange={handleChange}
                         required
-                        placeholder="Enter your last name"
+                        placeholder="Enter your Last Name"
                     />
                 </div>
 
@@ -77,7 +128,7 @@ const Register = () => {
                         value={formData.email}
                         onChange={handleChange}
                         required
-                        placeholder="Enter your email"
+                        placeholder="Enter your Email"
                     />
                 </div>
 
@@ -90,7 +141,7 @@ const Register = () => {
                         value={formData.username}
                         onChange={handleChange}
                         required
-                        placeholder="Choose a username"
+                        placeholder="Choose a Username"
                     />
                 </div>
 
@@ -103,7 +154,7 @@ const Register = () => {
                         value={formData.password}
                         onChange={handleChange}
                         required
-                        placeholder="Choose a password"
+                        placeholder="Enter your Password"
                     />
                 </div>
 
@@ -116,12 +167,12 @@ const Register = () => {
                         onChange={handleChange}
                         required
                     >
-                        <option value="homeowner">Home Owner</option>
-                        <option value="contractor">Contractor</option>
+                        <option value="1">Client</option>
+                        <option value="2">Contractor</option>
                     </select>
                 </div>
 
-                {formData.userType === 'contractor' && (
+                {formData.userType === '2' && (
                     <>
                         <div className="form-group">
                             <label htmlFor="companyName">Company Name</label>
@@ -132,20 +183,7 @@ const Register = () => {
                                 value={formData.companyName}
                                 onChange={handleChange}
                                 required
-                                placeholder="Enter company name"
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label htmlFor="licenseNumber">License Number</label>
-                            <input
-                                type="text"
-                                id="licenseNumber"
-                                name="licenseNumber"
-                                value={formData.licenseNumber}
-                                onChange={handleChange}
-                                required
-                                placeholder="Enter license number"
+                                placeholder="Enter Company Name"
                             />
                         </div>
                     </>
