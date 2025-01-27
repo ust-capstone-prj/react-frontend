@@ -3,7 +3,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-image: url('C:/Users/Administrator/Desktop/React-apply/react-frontend-1/src/assets/LoginImg.webp');
+    background-image: url('src/assets/LoginImg.jpg');
     background-size: cover;
     background-position: center;
 }

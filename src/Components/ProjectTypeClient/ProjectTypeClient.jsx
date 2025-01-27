@@ -14,6 +14,10 @@ const ProjectTypeClient = () => {
         navigate('/interior-categories');
     };
 
+    const handleConstructionClick = () => {
+        navigate('/construction-categories');
+    };
+
     return (
         <div className="project-type-client-container">
             <h1 className="animated-title">Choose Your Project Type</h1>
@@ -31,7 +35,11 @@ const ProjectTypeClient = () => {
                     </div>
                 </div>
 
-                <div className={`card ${isVisible ? 'fade-in' : ''}`}>
+                <div 
+                    className={`card ${isVisible ? 'fade-in' : ''}`}
+                    onClick={handleConstructionClick}
+                    style={{ cursor: 'pointer' }}
+                >
                     <div className="card-image construction"></div>
                     <div className="card-content">
                         <h2>Construction</h2>

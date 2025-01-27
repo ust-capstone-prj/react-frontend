@@ -1,0 +1,273 @@
+.construction-categories-container {
+    padding: 2rem;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f6f8ff 0%, #e9f0ff 100%);
+    background-size: 400% 400%;
+    animation: gradientBG 15s ease infinite;
+}
+
+.animated-title {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    animation: fadeInDown 1s ease-out;
+}
+
+.construction-cards-container {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.construction-card {
+    background: white;
+    border-radius: 20px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+    width: 500px;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    opacity: 0;
+}
+
+.construction-card:hover {
+    transform: translateY(-10px);
+}
+
+.card-image {
+    height: 300px;
+    background-size: cover;
+    background-position: center;
+}
+
+.card-image.new-home {
+    background-image: url('src/assets/NewHouseClint.jpg');
+}
+
+.card-image.renovation {
+    background-image: url('src/assets/RenovationClint.jpg');
+}
+
+.card-content {
+    padding: 2rem;
+}
+
+.card-content h2 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.8rem;
+    transition: all 0.3s ease;
+}
+
+.card-content p {
+    color: #666;
+    margin-bottom: 1rem;
+    transition: all 0.3s ease;
+}
+
+.card-content ul {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 1.5rem;
+}
+
+.card-content ul li {
+    color: #666;
+    margin-bottom: 0.5rem;
+    padding-left: 1.5rem;
+    position: relative;
+    transition: all 0.3s ease;
+}
+
+.card-content ul li:before {
+    content: "→";
+    position: absolute;
+    left: 0;
+    color: #3498db;
+    transition: transform 0.3s ease;
+}
+
+.learn-more-btn {
+    background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.3s ease;
+}
+
+.learn-more-btn:hover {
+    transform: scale(1.05);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.slide-in-left {
+    animation: slideInLeft 1s ease-out forwards;
+}
+
+.slide-in-right {
+    animation: slideInRight 1s ease-out forwards;
+}
+
+@keyframes slideInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes slideInRight {
+    from {
+        opacity: 0;
+        transform: translateX(100px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.card-hover {
+    transform: translateY(-15px) scale(1.02);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+}
+
+.pulse {
+    animation: pulse 2s infinite;
+}
+
+.bounce-text {
+    animation: bounce 1s ease-out;
+}
+
+.fade-in-text {
+    opacity: 0;
+    animation: fadeIn 0.8s ease-out forwards;
+    animation-delay: 0.5s;
+}
+
+.stagger-list li {
+    opacity: 0;
+    animation: slideInRight 0.5s ease-out forwards;
+}
+
+.stagger-list li:nth-child(1) { animation-delay: 0.2s; }
+.stagger-list li:nth-child(2) { animation-delay: 0.4s; }
+.stagger-list li:nth-child(3) { animation-delay: 0.6s; }
+.stagger-list li:nth-child(4) { animation-delay: 0.8s; }
+
+.glow-effect {
+    position: relative;
+    overflow: hidden;
+}
+
+.glow-effect:after {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: linear-gradient(
+        45deg,
+        rgba(255, 255, 255, 0) 0%,
+        rgba(255, 255, 255, 0.8) 50%,
+        rgba(255, 255, 255, 0) 100%
+    );
+    transform: rotate(45deg);
+    animation: glow 3s infinite;
+}
+
+/* New Animations */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.02);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(-20px);
+        opacity: 0;
+    }
+    50% {
+        transform: translateY(10px);
+    }
+    100% {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes glow {
+    0% {
+        left: -50%;
+    }
+    100% {
+        left: 100%;
+    }
+}
+
+/* Enhanced hover effects */
+.construction-card:hover .card-content h2 {
+    color: #3498db;
+    transform: scale(1.05);
+}
+
+.construction-card:hover .learn-more-btn {
+    background: linear-gradient(135deg, #2980b9 0%, #3498db 100%);
+    transform: scale(1.1);
+}
+
+.construction-card:hover .card-content ul li:before {
+    transform: translateX(5px);
+    transition: transform 0.3s ease;
+}
+
+/* Background animation */
+@keyframes gradientBG {
+    0% {
+        background-position: 0% 50%;
+    }
+    50% {
+        background-position: 100% 50%;
+    }
+    100% {
+        background-position: 0% 50%;
+    }
+} 
