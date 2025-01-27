@@ -58,8 +58,7 @@ const Login = () => {
             }
             else if(roleName == "CLIENT")
             {
-                //navigate to client dashboard
-                alert("Logged in as Client")
+                navigate('/project-type-client')
             }
             else
             {
