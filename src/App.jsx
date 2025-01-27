@@ -10,6 +10,7 @@ import About from './Components/About'
 import Contact from './Components/Contact'
 import ProjectType from './Components/ProjectType/ProjectType'
 import ProjectTypeCategory from './Components/ProjectTypeCategory/ProjectTypeCategory'
+import Templates1 from './Components/Templates/Templates1'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -27,6 +28,7 @@ function App() {
       <Route path="/contact" element={<Contact />} />
       <Route path="/project-type" element={<ProjectType />} />
       <Route path="/project-category" element={<ProjectTypeCategory />} />
+      <Route path="/paint-templates" element={<Templates1 />} />
     </Routes>
     </BrowserRouter>
     

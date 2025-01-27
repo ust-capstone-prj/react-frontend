@@ -1,0 +1,212 @@
+.templates-container {
+    min-height: 100vh;
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #e0eafc 100%);
+}
+
+.templates-title {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+    animation: slideDown 0.5s ease-out;
+}
+
+.create-template-btn {
+    display: block;
+    margin: 2rem auto;
+    padding: 1rem 2rem;
+    background: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    animation: fadeIn 0.5s ease-out;
+}
+
+.create-template-btn:hover {
+    background: #45a049;
+    transform: translateY(-2px);
+}
+
+.template-form-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.template-form {
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 500px;
+    animation: slideUp 0.5s ease-out;
+}
+
+.template-form h3 {
+    color: #2c3e50;
+    margin-bottom: 1.5rem;
+    text-align: center;
+}
+
+.form-group {
+    margin-bottom: 1.5rem;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 0.8rem;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1rem;
+}
+
+.form-buttons {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+}
+
+.form-buttons button {
+    padding: 0.8rem 1.5rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.form-buttons button[type="submit"] {
+    background: #4CAF50;
+    color: white;
+}
+
+.form-buttons .cancel-btn {
+    background: #ff5252;
+    color: white;
+}
+
+.templates-list {
+    display: flex;
+    overflow-x: auto;
+    padding: 2rem 0;
+    gap: 2rem;
+    scroll-behavior: smooth;
+}
+
+.template-card {
+    flex: 0 0 300px;
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    transition: all 0.3s ease;
+    animation: slideIn 0.5s ease-out;
+}
+
+.template-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+}
+
+.template-image {
+    height: 200px;
+    overflow: hidden;
+}
+
+.template-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.template-details {
+    padding: 1.5rem;
+}
+
+.template-details h3 {
+    color: #2c3e50;
+    margin-bottom: 0.5rem;
+}
+
+.template-details p {
+    color: #666;
+    margin: 0.5rem 0;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* Scrollbar styling */
+.templates-list::-webkit-scrollbar {
+    height: 8px;
+}
+
+.templates-list::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+.templates-list::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+}
+
+.templates-list::-webkit-scrollbar-thumb:hover {
+    background: #555;
+} 

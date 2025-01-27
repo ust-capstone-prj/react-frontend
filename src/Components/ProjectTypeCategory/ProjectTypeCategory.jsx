@@ -24,8 +24,14 @@ const ProjectTypeCategory = () => {
     ];
 
     const handleCategorySelect = (category) => {
-        console.log(`Selected category: ${category}`);
-        // Add navigation logic here
+        const card = document.querySelector(`.category-card[data-type="${category}"]`);
+        card.classList.add('card-clicked');
+        
+        setTimeout(() => {
+            if (category === 'paint') {
+                navigate('/paint-templates');
+            }
+        }, 500);
     };
 
     return (
@@ -37,6 +43,7 @@ const ProjectTypeCategory = () => {
                     <div 
                         key={index}
                         className="category-card"
+                        data-type={category.title.toLowerCase()}
                         onClick={() => handleCategorySelect(category.title.toLowerCase())}
                     >
                         <div className="category-image">
