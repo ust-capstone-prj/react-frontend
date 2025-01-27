@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProjectTypeCategory.css';
 
+
 const ProjectTypeCategory = () => {
     const navigate = useNavigate();
     
@@ -28,8 +29,16 @@ const ProjectTypeCategory = () => {
         card.classList.add('card-clicked');
         
         setTimeout(() => {
-            if (category === 'paint') {
-                navigate('/paint-templates');
+            switch(category) {
+                case 'paint':
+                    navigate('/paint-templates');
+                    break;
+                case 'ceiling':
+                    navigate('/ceiling-templates');
+                    break;
+                case 'lighting':
+                    navigate('/lighting-templates');
+                    break;
             }
         }, 500);
     };

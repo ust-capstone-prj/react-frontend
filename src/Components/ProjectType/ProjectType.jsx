@@ -11,7 +11,12 @@ const ProjectType = () => {
         
         setTimeout(() => {
             navigate('/project-category');
-        }, 500); // Navigate after animation completes
+        }, 500); 
+            // Navigate after animation completes
+    };
+    
+    const handleConstructionClick = () => {
+        navigate('/project-category1');
     };
 
     return (
@@ -38,7 +43,7 @@ const ProjectType = () => {
 
                 <div 
                     className="project-card"
-                    onClick={() => handleProjectSelect('construction')}
+                    onClick={handleConstructionClick}
                 >
                     <div className="card-image">
                         <img 
