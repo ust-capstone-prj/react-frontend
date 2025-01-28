@@ -7,7 +7,7 @@ const Templates1 = () => {
         image: '',
         variationName: '',
         baseCost: '',
-        duration: '',
+        description: '',
         materialCostPercent: '',
         laborCostPercent: '',
         profitPercent: ''
@@ -50,8 +50,84 @@ const Templates1 = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        // project_type_category_id
+        // String ProjTypCatVarName;
+        // private double ProjTypCatVarCost;
+        // private String ProjTypCatVarImg;
+        // private String ProjTypCatVarDesc;
+        // private Long ProjTypCatId;
+
+        requestBody1 = {
+            ProjTypCatVarName: newTemplate.variationName,
+            ProjTypCatVarCost: newTemplate.baseCost,
+            ProjTypCatVarImg: newTemplate.image,
+            ProjTypCatVarDesc: newTemplate.description,
+            ProjTypCatId: 1 //painting
+        }
+
+        fetch("https://localhost:8060/api/projectvar", {
+            method: "POST",
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(requestBody1)
+        })
+        .then((response)=> {
+            if(!response.ok){
+                alert("Failed to save template")
+                throw new Error("Failed to save template")
+            }
+            return response.json()
+        })
+        // then(({ ProjTypCatVarCatId }) 
+        .then(({ProjTypCatVarCatId})=>{
+            const materialCost = (newTemplate.baseCost * newTemplate.materialCostPercent) / 100;
+            const labourCost = (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
+            const profitCost = newTemplate.baseCost - (materialCost + labourCost);
+            alert("Template added")
+            // private Long ProjTypCatVarId;
+            // private double ProfitCost;
+            // private double LabourCost;
+            // private double MaterialCost;
+            // @Column(name = "profit_cost")
+            // private double ProfitCost;
+
+            // @Column(name = "labour_cost")
+            // private double LabourCost;
+
+            // @Column(name = "material_cost")
+            // private double MaterialCost;
+
+            // @Column(name = "variation_id")
+            // private Long ProjTypCatVarId;
+            requestBody2 = {
+                ProfitCost: profitCost,
+                LabourCost: labourCost,
+                MaterialCost: materialCost,
+                ProjTypCatVarId
+            }
+            console.log("requestBody2: ", requestBody2)
+            fetch("https://localhost:8060/api/projectcost", {
+                method: "POST",
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(requestBody2)
+            })
+            .then((response)=> {
+                if(!response.ok){
+                    alert("Failed to save template")
+                    throw new Error("Failed to save template")
+                }
+                return response.json()
+            })
+            .then((data)=>{
+                alert("Added cost successfully")
+            })
+        })
+
         setTemplates(prev => [...prev, { ...newTemplate, id: Date.now() }]);
-        setNewTemplate({ image: '', variationName: '', baseCost: '', duration: '', materialCostPercent: '', laborCostPercent: '', profitPercent: '' });
+        setNewTemplate({ image: '', variationName: '', baseCost: '', description: '', materialCostPercent: '', laborCostPercent: '', profitPercent: '' });
         setIsFormVisible(false);
     };
 
@@ -104,11 +180,11 @@ const Templates1 = () => {
                         </div>
 
                         <div className="form-group">
-                            <label>Duration (days)</label>
+                            <label>Description (days)</label>
                             <input 
                                 type="number"
-                                name="duration"
-                                value={newTemplate.duration}
+                                name="description"
+                                value={newTemplate.description}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -176,7 +252,7 @@ const Templates1 = () => {
                         <div className="template-details">
                             <h3>{template.variationName}</h3>
                             <p>Base Cost: ₹{template.baseCost}</p>
-                            <p>Duration: {template.duration} days</p>
+                            <p>Description: {template.description} days</p>
                             <p>Material Cost: {template.materialCostPercent}%</p>
                             <p>Labor Cost: {template.laborCostPercent}%</p>
                             <p>Profit: {template.profitPercent}%</p>
