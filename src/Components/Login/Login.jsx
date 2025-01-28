@@ -23,7 +23,6 @@ const Login = () => {
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        // Add your login logic here
         console.log("Login attempted with:", formData);
 
         const requestBody = {
@@ -49,22 +48,26 @@ const Login = () => {
             .then((data) => {
                 console.log("Response Data:", data);
                 const { username, roleName, token } = data;
+                
+                // Store the auth token and role
                 sessionStorage.setItem("authToken", token);
+                sessionStorage.setItem("userRole", roleName);
 
-                if (roleName == "CONTRACTOR") {
+                // Navigate based on role
+                if (roleName === "CONTRACTOR") {
                     console.log("Logged in as Contractor");
                     navigate("/project-type");
-                } else if (roleName == "CLIENT") {
+                } else if (roleName === "CLIENT") {
                     navigate("/project-type-client");
                 } else {
                     console.error("Unknown role:", roleName);
                 }
+            })
+            .catch((error) => {
+                console.error("Login error:", error);
+                sessionStorage.removeItem("authToken"); // Clear any existing token
+                sessionStorage.removeItem("userRole"); // Clear any existing role
             });
-
-        // Navigate to ProjectType if user is a contractor
-        // if (formData.userType === 'contractor') {
-        //     navigate('/project-type');
-        // }
     };
 
     // Handle clearing the form
@@ -74,6 +77,11 @@ const Login = () => {
             password: "",
             userType: "contractor",
         });
+    };
+
+    const handleLogout = () => {
+        sessionStorage.removeItem("authToken");
+        navigate("/login");
     };
 
     return (
