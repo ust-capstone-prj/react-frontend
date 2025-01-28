@@ -4,7 +4,7 @@ import viteLogo from '/vite.svg'
 import './App.css'
 import Login from './Components/Login/Login'
 import Landing from './Components/Landing'
-import { Routes, Route, BrowserRouter } from 'react-router-dom'
+import { Routes, Route, BrowserRouter, Navigate } from 'react-router-dom'
 import Register from './Components/Register/Register'
 import About from './Components/About'
 import Contact from './Components/Contact'
@@ -20,9 +20,23 @@ import ProjectTypeClient from './Components/ProjectTypeClient/ProjectTypeClient'
 import ProjectTypeCategoryClient from './Components/ProjectTypeCategoryClient/ProjectTypeCategoryClient'
 import ProjectTypeCategory1Client from './Components/ProjectTypeCategory1Client/ProjectTypeCategory1Client'
 
-function App() {
-  const [count, setCount] = useState(0)
+// Protected Route Component with role check
+const ProtectedRoute = ({ children, allowedRoles }) => {
+  const authToken = sessionStorage.getItem('authToken');
+  const userRole = sessionStorage.getItem('userRole');
+  
+  if (!authToken) {
+    return <Navigate to="/login" replace />;
+  }
 
+  if (!allowedRoles.includes(userRole)) {
+    return <Navigate to="/" replace />;
+  }
+  
+  return children;
+};
+
+function App() {
   return (
     <>
     {/* <Landing /> */}
@@ -32,19 +46,77 @@ function App() {
       <Route exact path="/" element={<Landing />} />
       <Route exact path="/login" element={<Login />} />
       <Route exact path="/register" element={<Register />} />
-      <Route path="/about/*" element={<About />} />
-      <Route path="/contact" element={<Contact />} />
-      <Route path="/project-type" element={<ProjectType />} />
-      <Route path='/paint-templates' element={<Templates1 />} />
-      <Route path='/ceiling-templates' element={<Templates2 />} />
-      <Route path='/lighting-templates' element={<Templates3 />} />
-      <Route path='/temp2' element={<Temp2 />} />
-      <Route path='/construction-template-1' element={<ConstructionTemplate1 />} />
-      <Route path="/project-category" element={<ProjectTypeCategory />} />
-      <Route path='/project-category1' element={<ProjectTypeCategory1 />} />
-      <Route path="/project-type-client" element={<ProjectTypeClient />} />
-      <Route path="/interior-categories" element={<ProjectTypeCategoryClient />} />
-      <Route path="/construction-categories" element={<ProjectTypeCategory1Client />} />
+      
+      {/* Contractor Routes */}
+      <Route path="/project-type" element={
+        <ProtectedRoute allowedRoles={['CONTRACTOR']}>
+          <ProjectType />
+        </ProtectedRoute>
+      } />
+      <Route path="/project-category" element={
+        <ProtectedRoute allowedRoles={['CONTRACTOR']}>
+          <ProjectTypeCategory />
+        </ProtectedRoute>
+      } />
+      <Route path='/project-category1' element={
+        <ProtectedRoute allowedRoles={['CONTRACTOR']}>
+          <ProjectTypeCategory1 />
+        </ProtectedRoute>
+      } />
+      <Route path='/paint-templates' element={
+        <ProtectedRoute allowedRoles={['CONTRACTOR']}>
+          <Templates1 />
+        </ProtectedRoute>
+      } />
+      <Route path='/ceiling-templates' element={
+        <ProtectedRoute allowedRoles={['CONTRACTOR']}>
+          <Templates2 />
+        </ProtectedRoute>
+      } />
+      <Route path='/lighting-templates' element={
+        <ProtectedRoute allowedRoles={['CONTRACTOR']}>
+          <Templates3 />
+        </ProtectedRoute>
+      } />
+      <Route path='/construction-template-1' element={
+        <ProtectedRoute allowedRoles={['CONTRACTOR']}>
+          <ConstructionTemplate1 />
+        </ProtectedRoute>
+      } />
+      <Route path='/temp2' element={
+        <ProtectedRoute allowedRoles={['CONTRACTOR']}>
+          <Temp2 />
+        </ProtectedRoute>
+      } />
+
+      {/* Client Routes */}
+      <Route path="/project-type-client" element={
+        <ProtectedRoute allowedRoles={['CLIENT']}>
+          <ProjectTypeClient />
+        </ProtectedRoute>
+      } />
+      <Route path="/interior-categories" element={
+        <ProtectedRoute allowedRoles={['CLIENT']}>
+          <ProjectTypeCategoryClient />
+        </ProtectedRoute>
+      } />
+      <Route path="/construction-categories" element={
+        <ProtectedRoute allowedRoles={['CLIENT']}>
+          <ProjectTypeCategory1Client />
+        </ProtectedRoute>
+      } />
+
+      {/* Common Routes (accessible by both roles) */}
+      <Route path="/about/*" element={
+        <ProtectedRoute allowedRoles={['CONTRACTOR', 'CLIENT']}>
+          <About />
+        </ProtectedRoute>
+      } />
+      <Route path="/contact" element={
+        <ProtectedRoute allowedRoles={['CONTRACTOR', 'CLIENT']}>
+          <Contact />
+        </ProtectedRoute>
+      } />
     </Routes>
     </BrowserRouter>
     
