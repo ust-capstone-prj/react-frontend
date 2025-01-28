@@ -4,6 +4,8 @@ const Templates3 = () => {
    
     const [templates, setTemplates] = useState([]);
     const [isFormOpen, setIsFormOpen] = useState(false);
+    const [isEditing, setIsEditing] = useState(false);
+    const [editingId, setEditingId] = useState(null);
     const [newTemplate, setNewTemplate] = useState({
         image: '',
         variationName: '',
@@ -50,9 +52,33 @@ const Templates3 = () => {
         }
     };
 
+    const handleDelete = (id) => {
+        const element = document.getElementById(`template-${id}`);
+        element.classList.add('fade-out');
+        
+        setTimeout(() => {
+            setTemplates(prev => prev.filter(template => template.id !== id));
+        }, 300);
+    };
+
+    const handleEdit = (template) => {
+        setNewTemplate(template);
+        setIsEditing(true);
+        setEditingId(template.id);
+        setIsFormOpen(true);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        setTemplates(prev => [...prev, { ...newTemplate, id: Date.now() }]);
+        if (isEditing) {
+            setTemplates(prev => prev.map(template => 
+                template.id === editingId ? { ...newTemplate, id: editingId } : template
+            ));
+            setIsEditing(false);
+            setEditingId(null);
+        } else {
+            setTemplates(prev => [...prev, { ...newTemplate, id: Date.now() }]);
+        }
         setNewTemplate({
             image: '',
             variationName: '',
@@ -170,12 +196,30 @@ const Templates3 = () => {
 
             <div className="templates-grid">
                 {templates.map(template => (
-                    <div key={template.id} className="template-card">
+                    <div 
+                        key={template.id} 
+                        id={`template-${template.id}`}
+                        className="template-card"
+                    >
                         <img src={template.image} alt={template.variationName} />
                         <div className="template-details">
                             <h3>{template.variationName}</h3>
                             <p>Cost: ${template.baseCost}</p>
                             <p>Duration: {template.duration} days</p>
+                            <div className="template-actions">
+                                <button 
+                                    className="edit-btn"
+                                    onClick={() => handleEdit(template)}
+                                >
+                                    Edit
+                                </button>
+                                <button 
+                                    className="delete-btn"
+                                    onClick={() => handleDelete(template.id)}
+                                >
+                                    Delete
+                                </button>
+                            </div>
                         </div>
                     </div>
                 ))}
