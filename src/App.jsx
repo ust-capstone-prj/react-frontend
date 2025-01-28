@@ -17,6 +17,8 @@ import Templates3 from './Components/InteriorTemplates/Templates3'
 import ConstructionTemplate1 from './Components/constructionTemplates/temp1'
 import Temp2 from './Components/constructionTemplates/temp2'
 import ProjectTypeClient from './Components/ProjectTypeClient/ProjectTypeClient'
+import ProjectTypeCategoryClient from './Components/ProjectTypeCategoryClient/ProjectTypeCategoryClient'
+import ProjectTypeCategory1Client from './Components/ProjectTypeCategory1Client/ProjectTypeCategory1Client'
 
 function App() {
   const [count, setCount] = useState(0)
@@ -41,6 +43,8 @@ function App() {
       <Route path="/project-category" element={<ProjectTypeCategory />} />
       <Route path='/project-category1' element={<ProjectTypeCategory1 />} />
       <Route path="/project-type-client" element={<ProjectTypeClient />} />
+      <Route path="/interior-categories" element={<ProjectTypeCategoryClient />} />
+      <Route path="/construction-categories" element={<ProjectTypeCategory1Client />} />
     </Routes>
     </BrowserRouter>
     

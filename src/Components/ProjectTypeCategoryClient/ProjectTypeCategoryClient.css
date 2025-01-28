@@ -1,0 +1,89 @@
+.category-container {
+    padding: 2rem;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+.category-title {
+    text-align: center;
+    color: #2c3e50;
+    font-size: 2.5rem;
+    margin-bottom: 3rem;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.category-cards-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.category-card {
+    background: white;
+    border-radius: 15px;
+    overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    opacity: 0;
+}
+
+.category-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+}
+
+.category-card-image {
+    height: 200px;
+    background-size: cover;
+    background-position: center;
+}
+
+.painting {
+    background-image: url('src/assets/paintingClint.jpg');
+}
+
+.ceiling {
+    background-image: url('src/assets/CelingClint.jpg');
+}
+
+.lighting {
+    background-image: url('src/assets/LightingClint.jpg');
+}
+
+.category-card-content {
+    padding: 1.5rem;
+}
+
+.category-card-content h2 {
+    color: #2c3e50;
+    margin-bottom: 1rem;
+    font-size: 1.5rem;
+}
+
+.category-card-content p {
+    color: #666;
+    line-height: 1.6;
+}
+
+/* Animation */
+.slide-in {
+    animation: slideIn 0.6s ease forwards;
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Add delay for each card */
+.category-card:nth-child(1) { animation-delay: 0.2s; }
+.category-card:nth-child(2) { animation-delay: 0.4s; }
+.category-card:nth-child(3) { animation-delay: 0.6s; } 

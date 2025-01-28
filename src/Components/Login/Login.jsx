@@ -88,7 +88,7 @@ const Login = () => {
                     <i className="fas fa-hard-hat"></i> Login Portal
                 </h2>
 
-                <div className="form-group">
+                {/* <div className="form-group">
                     <label>Login as</label>
                     <div className="radio-group">
                         <label>
@@ -112,7 +112,7 @@ const Login = () => {
                             Client
                         </label>
                     </div>
-                </div>
+                </div> */}
 
                 <div className="form-group">
                     <label htmlFor="username">Username</label>
