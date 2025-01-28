@@ -3,7 +3,10 @@ import './temp2.css';
 
 const Temp2 = () => {
     const [showForm, setShowForm] = useState(false);
-    const [cards, setCards] = useState([]);
+    const [cards, setCards] = useState(() => {
+        const savedCards = localStorage.getItem('constructionTemplates');
+        return savedCards ? JSON.parse(savedCards) : [];
+    });
     const [formData, setFormData] = useState({
         image: '',
         name: '',
@@ -11,9 +14,30 @@ const Temp2 = () => {
         percentage: '',
         description: ''
     });
+    const [editingCard, setEditingCard] = useState(null);
 
     const handleCreateCard = () => {
         setShowForm(true);
+        setEditingCard(null);
+        setFormData({
+            image: '',
+            name: '',
+            baseCost: '',
+            percentage: '',
+            description: ''
+        });
+    };
+
+    const handleEdit = (card) => {
+        setEditingCard(card);
+        setFormData(card);
+        setShowForm(true);
+    };
+
+    const handleDelete = (indexToDelete) => {
+        const updatedCards = cards.filter((_, index) => index !== indexToDelete);
+        setCards(updatedCards);
+        localStorage.setItem('constructionTemplates', JSON.stringify(updatedCards));
     };
 
     const handleInputChange = (e) => {
@@ -40,7 +64,21 @@ const Temp2 = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        setCards(prev => [...prev, formData]);
+        
+        if (editingCard !== null) {
+            // Update existing card
+            const updatedCards = cards.map((card, index) => 
+                index === cards.indexOf(editingCard) ? formData : card
+            );
+            setCards(updatedCards);
+            localStorage.setItem('constructionTemplates', JSON.stringify(updatedCards));
+        } else {
+            // Create new card
+            const updatedCards = [...cards, formData];
+            setCards(updatedCards);
+            localStorage.setItem('constructionTemplates', JSON.stringify(updatedCards));
+        }
+
         setFormData({
             image: '',
             name: '',
@@ -49,6 +87,7 @@ const Temp2 = () => {
             description: ''
         });
         setShowForm(false);
+        setEditingCard(null);
     };
 
     return (
@@ -68,7 +107,7 @@ const Temp2 = () => {
                             type="file"
                             accept="image/*"
                             onChange={handleImageUpload}
-                            required
+                            required={!editingCard}
                         />
                         <input
                             type="text"
@@ -101,7 +140,9 @@ const Temp2 = () => {
                             onChange={handleInputChange}
                             required
                         />
-                        <button type="submit">Create Card</button>
+                        <button type="submit">
+                            {editingCard ? 'Update Card' : 'Create Card'}
+                        </button>
                     </form>
                 </div>
             )}
@@ -114,6 +155,20 @@ const Temp2 = () => {
                         <p className="cost">Base Cost: ${card.baseCost}</p>
                         <p className="percentage">Percentage: {card.percentage}%</p>
                         <p className="description">{card.description}</p>
+                        <div className="card-actions">
+                            <button 
+                                className="edit-button"
+                                onClick={() => handleEdit(card)}
+                            >
+                                Edit
+                            </button>
+                            <button 
+                                className="delete-button"
+                                onClick={() => handleDelete(index)}
+                            >
+                                Delete
+                            </button>
+                        </div>
                     </div>
                 ))}
             </div>

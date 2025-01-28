@@ -73,25 +73,44 @@
     outline: none;
 }
 
-.templates-list {
+.templates-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-    gap: 2.5rem;
-    padding: 2rem 0;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px;
 }
 
 .template-card {
-    background: rgba(255, 255, 255, 0.95);
-    border-radius: 20px;
+    position: relative;
+    transition: all 0.3s ease;
+    animation: fade-in 0.3s ease-in;
+    background: white;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     overflow: hidden;
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    animation: slideUpFade 0.6s ease-out forwards;
+    width: 200px;
 }
 
-.template-card:hover {
-    transform: translateY(-10px) rotate(2deg);
-    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+.template-card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.template-details {
+    padding: 10px;
+}
+
+.template-details h3 {
+    margin: 0;
+    font-size: 1rem;
+    color: #333;
+}
+
+.template-details p {
+    margin: 5px 0;
+    font-size: 0.9rem;
+    color: #666;
 }
 
 /* New Animations */
@@ -112,15 +131,32 @@
     }
 }
 
-@keyframes slideUpFade {
+@keyframes floatIn {
     0% { 
         opacity: 0;
-        transform: translateY(100px) scale(0.8);
+        transform: translateY(50px) scale(0.8);
     }
     100% { 
         opacity: 1;
         transform: translateY(0) scale(1);
     }
+}
+
+@keyframes fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.fade-out {
+    opacity: 0;
+    transform: scale(0.8);
+    transition: all 0.3s ease;
 }
 
 /* Hover Effects */
@@ -145,6 +181,14 @@
     opacity: 1;
 }
 
+.template-image img {
+    transition: transform 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.template-card:hover .template-image img {
+    transform: scale(1.1) rotate(2deg);
+}
+
 /* Responsive Design */
 @media (max-width: 768px) {
     .templates-container {
@@ -159,4 +203,83 @@
         padding: 1.5rem;
         width: 95%;
     }
+}
+
+.form-actions {
+    display: flex;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+.upload-btn, .cancel-btn {
+    flex: 1;
+    padding: 1rem;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.upload-btn {
+    background: #6c5ce7;
+    color: white;
+}
+
+.cancel-btn {
+    background: #e74c3c;
+    color: white;
+}
+
+.upload-btn:hover, .cancel-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+}
+
+/* Add custom scrollbar styling */
+.templates-list::-webkit-scrollbar {
+    height: 8px;
+}
+
+.templates-list::-webkit-scrollbar-track {
+    background: rgba(0, 0, 0, 0.1);
+    border-radius: 4px;
+}
+
+.templates-list::-webkit-scrollbar-thumb {
+    background: #6c5ce7;
+    border-radius: 4px;
+}
+
+.templates-list::-webkit-scrollbar-thumb:hover {
+    background: #5b4ccd;
+}
+
+.template-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.edit-btn, .delete-btn {
+    padding: 5px 15px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.edit-btn {
+    background-color: #4CAF50;
+    color: white;
+}
+
+.delete-btn {
+    background-color: #f44336;
+    color: white;
+}
+
+.edit-btn:hover, .delete-btn:hover {
+    transform: scale(1.05);
+    filter: brightness(1.1);
 }
