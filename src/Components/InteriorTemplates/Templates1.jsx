@@ -56,16 +56,18 @@ const Templates1 = () => {
         // private String ProjTypCatVarImg;
         // private String ProjTypCatVarDesc;
         // private Long ProjTypCatId;
-
-        requestBody1 = {
-            ProjTypCatVarName: newTemplate.variationName,
-            ProjTypCatVarCost: newTemplate.baseCost,
-            ProjTypCatVarImg: newTemplate.image,
-            ProjTypCatVarDesc: newTemplate.description,
-            ProjTypCatId: 1 //painting
+        const typecatid = 1
+        console.log("value is: ",typecatid)
+        const requestBody1 = {
+            projTypCatVarName: newTemplate.variationName,
+            projTypCatVarCost: newTemplate.baseCost,
+            projTypCatVarImg: newTemplate.image,
+            projTypCatVarDesc: newTemplate.description,
+            projTypCatId: typecatid
         }
-
-        fetch("https://localhost:8060/api/projectvar", {
+        // console.log(requestBody1)
+        console.log("Final response body", JSON.stringify(requestBody1))
+        fetch("http://localhost:8060/api/projectvar", {
             method: "POST",
             headers: {
                 'Content-Type':'application/json'
@@ -80,10 +82,10 @@ const Templates1 = () => {
             return response.json()
         })
         // then(({ ProjTypCatVarCatId }) 
-        .then(({ProjTypCatVarCatId})=>{
-            const materialCost = (newTemplate.baseCost * newTemplate.materialCostPercent) / 100;
-            const labourCost = (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
-            const profitCost = newTemplate.baseCost - (materialCost + labourCost);
+        .then(({projTypCatVarCatId})=>{
+            const MaterialCost = (newTemplate.baseCost * newTemplate.materialCostPercent) / 100;
+            const LabourCost = (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
+            const ProfitCost = newTemplate.baseCost - (materialCost + labourCost);
             alert("Template added")
             // private Long ProjTypCatVarId;
             // private double ProfitCost;
@@ -100,14 +102,14 @@ const Templates1 = () => {
 
             // @Column(name = "variation_id")
             // private Long ProjTypCatVarId;
-            requestBody2 = {
-                ProfitCost: profitCost,
-                LabourCost: labourCost,
-                MaterialCost: materialCost,
-                ProjTypCatVarId
+            const requestBody2 = {
+                profitCost: ProfitCost,
+                labourCost: LabourCost,
+                materialCost: MaterialCost,
+                projTypCatVarId
             }
             console.log("requestBody2: ", requestBody2)
-            fetch("https://localhost:8060/api/projectcost", {
+            fetch("http://localhost:8060/api/projectcost", {
                 method: "POST",
                 headers: {
                     'Content-Type':'application/json'
