@@ -50,12 +50,6 @@ const Templates1 = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        // project_type_category_id
-        // String ProjTypCatVarName;
-        // private double ProjTypCatVarCost;
-        // private String ProjTypCatVarImg;
-        // private String ProjTypCatVarDesc;
-        // private Long ProjTypCatId;
         const typecatid = 1
         console.log("value is: ",typecatid)
         const requestBody1 = {
@@ -87,21 +81,6 @@ const Templates1 = () => {
             const LabourCost = (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
             const ProfitCost = newTemplate.baseCost - (materialCost + labourCost);
             alert("Template added")
-            // private Long ProjTypCatVarId;
-            // private double ProfitCost;
-            // private double LabourCost;
-            // private double MaterialCost;
-            // @Column(name = "profit_cost")
-            // private double ProfitCost;
-
-            // @Column(name = "labour_cost")
-            // private double LabourCost;
-
-            // @Column(name = "material_cost")
-            // private double MaterialCost;
-
-            // @Column(name = "variation_id")
-            // private Long ProjTypCatVarId;
             const requestBody2 = {
                 profitCost: ProfitCost,
                 labourCost: LabourCost,
