@@ -19,6 +19,11 @@ import Temp2 from './Components/constructionTemplates/temp2'
 import ProjectTypeClient from './Components/ProjectTypeClient/ProjectTypeClient'
 import ProjectTypeCategoryClient from './Components/ProjectTypeCategoryClient/ProjectTypeCategoryClient'
 import ProjectTypeCategory1Client from './Components/ProjectTypeCategory1Client/ProjectTypeCategory1Client'
+import Paints from './Components/InteriorTemplatesClient/Paints'
+import Ceilings from './Components/InteriorTemplatesClient/Ceilings'
+import Lighting from './Components/InteriorTemplatesClient/Lighting'
+import NewHome from './Components/constructionTemplatesClient/NewHome'
+import Renovation from './Components/constructionTemplatesClient/Renovation'
 
 // Protected Route Component with role check
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -103,6 +108,33 @@ function App() {
       <Route path="/construction-categories" element={
         <ProtectedRoute allowedRoles={['CLIENT']}>
           <ProjectTypeCategory1Client />
+        </ProtectedRoute>
+      } />
+      <Route path="/interior/paints" element={
+        <ProtectedRoute allowedRoles={['CLIENT']}>
+          <Paints />
+        </ProtectedRoute>
+      } />
+      <Route path="/interior/ceilings" element={
+        <ProtectedRoute allowedRoles={['CLIENT']}>
+          <Ceilings />
+        </ProtectedRoute>
+      } />
+      <Route path="/interior/lighting" element={
+        <ProtectedRoute allowedRoles={['CLIENT']}>
+          <Lighting />
+        </ProtectedRoute>
+      } />
+
+      {/* Construction Routes */}
+      <Route path="/new-home" element={
+        <ProtectedRoute allowedRoles={['CLIENT']}>
+          <NewHome />
+        </ProtectedRoute>
+      } />
+      <Route path="/renovation" element={
+        <ProtectedRoute allowedRoles={['CLIENT']}>
+          <Renovation />
         </ProtectedRoute>
       } />
 
