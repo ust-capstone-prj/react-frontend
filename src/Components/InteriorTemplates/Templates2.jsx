@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './Templates1.css';
+import { useEffect } from'react';``
 
 const Templates2 = () => {
     const [templates, setTemplates] = useState([]);
@@ -7,12 +8,19 @@ const Templates2 = () => {
         image: '',
         variationName: '',
         baseCost: '',
-        duration: '',
+        description: '',
         materialCostPercent: '',
         laborCostPercent: '',
         profitPercent: ''
     });
     const [isFormVisible, setIsFormVisible] = useState(false);
+    
+    useEffect(() => {
+        fetch("http://localhost:8060/api/projectvar")
+            .then((response) => response.json())
+            .then((data) => setTemplates(data))
+            .catch((error) => console.error("Error fetching variations:", error));
+    }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -34,6 +42,7 @@ const Templates2 = () => {
             return updatedTemplate;
         });
     };
+    
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -49,21 +58,41 @@ const Templates2 = () => {
         }
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setTemplates(prev => [...prev, { ...newTemplate, id: Date.now() }]);
-        setNewTemplate({ 
-            image: '', 
-            variationName: '', 
-            baseCost: '', 
-            duration: '', 
-            materialCostPercent: '', 
-            laborCostPercent: '', 
-            profitPercent: '' 
-        });
-        setIsFormVisible(false);
+    
+       
+        
+            const response = await fetch("http://localhost:8060/api/projectvar", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(newTemplate)
+            });
+    
+            if (!response.ok) {
+                throw new Error("Failed to upload template");
+            }
+    
+            const savedTemplate = await response.json();
+            setTemplates(prev => [...prev, savedTemplate]);
+    
+            // Reset form and hide
+            setNewTemplate({ 
+                image: '', 
+                variationName: '', 
+                baseCost: '', 
+                description: '', 
+                materialCostPercent: '', 
+                laborCostPercent: '', 
+                profitPercent: '' 
+            });
+            setIsFormVisible(false);
+    
+        
     };
-
+    
     return (
         <div className="templates-container">
             <h2 className="templates-title">Ceiling Design Templates</h2>
@@ -108,11 +137,11 @@ const Templates2 = () => {
                             />
                         </div>
                         <div className="form-group">
-                            <label>Duration (days):</label>
+                            <label>Description:</label>
                             <input 
-                                type="number"
-                                name="duration"
-                                value={newTemplate.duration}
+                                type="text"
+                                name="description"
+                                value={newTemplate.description}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -161,7 +190,7 @@ const Templates2 = () => {
                         <div className="template-details">
                             <h3>{template.variationName}</h3>
                             <p>Base Cost: ₹{template.baseCost}</p>
-                            <p>Duration: {template.duration} days</p>
+                            <p>Description: {template.description}</p>
                             <p>Material Cost: {template.materialCostPercent}%</p>
                             <p>Labor Cost: {template.laborCostPercent}%</p>
                             <p>Profit: {template.profitPercent}%</p>
