@@ -1,19 +1,37 @@
 import { useState, useEffect } from 'react';
 import './ProjectTypeCategoryClient.css';
+import { useNavigate } from 'react-router-dom';
 
 const ProjectTypeCategoryClient = () => {
     const [isVisible, setIsVisible] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         setIsVisible(true);
     }, []);
+
+    const handlePaintingClick = () => {
+        navigate('/interior/paints');
+    };
+
+    const handleCeilingClick = () => {
+        navigate('/interior/ceilings');
+    };
+
+    const handleLightingClick = () => {
+        navigate('/interior/lighting');
+    };
 
     return (
         <div className="category-container">
             <h1 className="category-title">Interior Design Services</h1>
             
             <div className="category-cards-container">
-                <div className={`category-card ${isVisible ? 'slide-in' : ''}`}>
+                <div 
+                    className={`category-card ${isVisible ? 'slide-in' : ''}`}
+                    onClick={handlePaintingClick}
+                    style={{ cursor: 'pointer' }}
+                >
                     <div className="category-card-image painting"></div>
                     <div className="category-card-content">
                         <h2>Premium Painting Solutions</h2>
@@ -21,7 +39,11 @@ const ProjectTypeCategoryClient = () => {
                     </div>
                 </div>
 
-                <div className={`category-card ${isVisible ? 'slide-in' : ''}`}>
+                <div 
+                    className={`category-card ${isVisible ? 'slide-in' : ''}`}
+                    onClick={handleCeilingClick}
+                    style={{ cursor: 'pointer' }}
+                >
                     <div className="category-card-image ceiling"></div>
                     <div className="category-card-content">
                         <h2>Elegant Ceiling Designs</h2>
@@ -29,7 +51,11 @@ const ProjectTypeCategoryClient = () => {
                     </div>
                 </div>
 
-                <div className={`category-card ${isVisible ? 'slide-in' : ''}`}>
+                <div 
+                    className={`category-card ${isVisible ? 'slide-in' : ''}`}
+                    onClick={handleLightingClick}
+                    style={{ cursor: 'pointer' }}
+                >
                     <div className="category-card-image lighting"></div>
                     <div className="category-card-content">
                         <h2>Innovative Lighting</h2>
