@@ -7,23 +7,12 @@ const Templates1 = () => {
         image: '',
         variationName: '',
         baseCost: '',
-        duration: '',
+        description: '',
         materialCostPercent: '',
         laborCostPercent: '',
         profitPercent: ''
     });
     const [isFormVisible, setIsFormVisible] = useState(false);
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setNewTemplate(prev => ({ ...prev, image: reader.result }));
-        };
-        if (file) {
-            reader.readAsDataURL(file);
-        }
-    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -50,8 +39,65 @@ const Templates1 = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
+        const typecatid = 1
+        console.log("value is: ",typecatid)
+        const requestBody1 = {
+            projTypCatVarName: newTemplate.variationName,
+            projTypCatVarCost: newTemplate.baseCost,
+            projTypCatVarImg: newTemplate.image,
+            projTypCatVarDesc: newTemplate.description,
+            projTypCatId: typecatid
+        }
+        // console.log(requestBody1)
+        console.log("Final response body", JSON.stringify(requestBody1))
+        fetch("http://localhost:8060/api/projectvar", {
+            method: "POST",
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(requestBody1)
+        })
+        .then((response)=> {
+            if(!response.ok){
+                alert("Failed to save template")
+                throw new Error("Failed to save template")
+            }
+            return response.json()
+        })
+        // then(({ ProjTypCatVarCatId }) 
+        .then(({projTypCatVarCatId})=>{
+            const MaterialCost = (newTemplate.baseCost * newTemplate.materialCostPercent) / 100;
+            const LabourCost = (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
+            const ProfitCost = newTemplate.baseCost - (materialCost + labourCost);
+            alert("Template added")
+            const requestBody2 = {
+                profitCost: ProfitCost,
+                labourCost: LabourCost,
+                materialCost: MaterialCost,
+                projTypCatVarId
+            }
+            console.log("requestBody2: ", requestBody2)
+            fetch("http://localhost:8060/api/projectcost", {
+                method: "POST",
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(requestBody2)
+            })
+            .then((response)=> {
+                if(!response.ok){
+                    alert("Failed to save template")
+                    throw new Error("Failed to save template")
+                }
+                return response.json()
+            })
+            .then((data)=>{
+                alert("Added cost successfully")
+            })
+        })
+
         setTemplates(prev => [...prev, { ...newTemplate, id: Date.now() }]);
-        setNewTemplate({ image: '', variationName: '', baseCost: '', duration: '', materialCostPercent: '', laborCostPercent: '', profitPercent: '' });
+        setNewTemplate({ image: '', variationName: '', baseCost: '', description: '', materialCostPercent: '', laborCostPercent: '', profitPercent: '' });
         setIsFormVisible(false);
     };
 
@@ -72,11 +118,13 @@ const Templates1 = () => {
                         <h3>Create New Template</h3>
                         
                         <div className="form-group">
-                            <label>Paint Work Image</label>
+                            <label>Paint Work Image URL</label>
                             <input 
-                                type="file" 
-                                accept="image/*"
-                                onChange={handleImageChange}
+                                type="url"
+                                name="image"
+                                value={newTemplate.image}
+                                onChange={handleInputChange}
+                                placeholder="Enter image URL"
                                 required
                             />
                         </div>
@@ -104,11 +152,11 @@ const Templates1 = () => {
                         </div>
 
                         <div className="form-group">
-                            <label>Duration (days)</label>
+                            <label>Description (days)</label>
                             <input 
                                 type="number"
-                                name="duration"
-                                value={newTemplate.duration}
+                                name="description"
+                                value={newTemplate.description}
                                 onChange={handleInputChange}
                                 required
                             />
@@ -176,7 +224,7 @@ const Templates1 = () => {
                         <div className="template-details">
                             <h3>{template.variationName}</h3>
                             <p>Base Cost: ₹{template.baseCost}</p>
-                            <p>Duration: {template.duration} days</p>
+                            <p>Description: {template.description} days</p>
                             <p>Material Cost: {template.materialCostPercent}%</p>
                             <p>Labor Cost: {template.laborCostPercent}%</p>
                             <p>Profit: {template.profitPercent}%</p>
