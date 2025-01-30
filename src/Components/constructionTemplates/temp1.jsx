@@ -6,14 +6,15 @@ const ConstructionTemplate1 = () => {
     const location = useLocation();
     const projectType = location.state?.projectType;
     
-    const [templates, setTemplates] = useState([]);
+    const [templates, setTemplates] = useState(() => {
+        const savedTemplates = localStorage.getItem('constructionTemplates1');
+        return savedTemplates ? JSON.parse(savedTemplates) : [];
+    });
     const [isFormVisible, setIsFormVisible] = useState(false);
+    const [editingTemplate, setEditingTemplate] = useState(null);
     const [templateData, setTemplateData] = useState({
         templateName: '',
-        bedrooms: '',
-        bathrooms: '',
         squareFeet: '',
-        garageCapacity: '',
         baseCost: '',
         materialCostPercent: '',
         laborCostPercent: '',
@@ -26,13 +27,11 @@ const ConstructionTemplate1 = () => {
         setTemplateData(prev => {
             const updatedTemplate = { ...prev, [name]: value };
             
-            // Calculate total percentage for cost fields
             const totalPercentage = 
                 Number(updatedTemplate.materialCostPercent || 0) +
                 Number(updatedTemplate.laborCostPercent || 0) +
                 Number(updatedTemplate.profitPercentage || 0);
 
-            // If total exceeds 100%, revert the change
             if (totalPercentage > 100 && 
                 (name === 'materialCostPercent' || 
                  name === 'laborCostPercent' || 
@@ -58,21 +57,53 @@ const ConstructionTemplate1 = () => {
         }
     };
 
+    const handleEdit = (template) => {
+        setEditingTemplate(template);
+        setTemplateData(template);
+        setIsFormVisible(true);
+    };
+
+    const handleDelete = (templateId) => {
+        const templateElement = document.getElementById(`template-${templateId}`);
+        templateElement.classList.add('template-delete-animation');
+
+        setTimeout(() => {
+            const updatedTemplates = templates.filter(template => template.id !== templateId);
+            setTemplates(updatedTemplates);
+            localStorage.setItem('constructionTemplates1', JSON.stringify(updatedTemplates));
+        }, 300);
+    };
+
     const handleSubmit = (e) => {
         e.preventDefault();
-        setTemplates(prev => [...prev, { ...templateData, id: Date.now() }]);
+        
+        let updatedTemplates;
+        if (editingTemplate) {
+            updatedTemplates = templates.map(template => 
+                template.id === editingTemplate.id 
+                    ? { ...templateData, id: template.id }
+                    : template
+            );
+        } else {
+            updatedTemplates = [...templates, { ...templateData, id: Date.now() }];
+        }
+
+        localStorage.setItem('constructionTemplates1', JSON.stringify(updatedTemplates));
+        setTemplates(updatedTemplates);
+        resetForm();
+    };
+
+    const resetForm = () => {
         setTemplateData({
             templateName: '',
-            bedrooms: '',
-            bathrooms: '',
             squareFeet: '',
-            garageCapacity: '',
             baseCost: '',
             materialCostPercent: '',
             laborCostPercent: '',
             profitPercentage: '',
             image: null
         });
+        setEditingTemplate(null);
         setIsFormVisible(false);
     };
 
@@ -92,7 +123,7 @@ const ConstructionTemplate1 = () => {
                 {isFormVisible && (
                     <div className="template-form-overlay">
                         <form className="template-form" onSubmit={handleSubmit}>
-                            <h3>Create New Template</h3>
+                            <h3>{editingTemplate ? 'Edit Template' : 'Create New Template'}</h3>
                             <div className="form-grid">
                                 <div className="form-group">
                                     <label htmlFor="templateName">Template Name</label>
@@ -102,34 +133,6 @@ const ConstructionTemplate1 = () => {
                                         name="templateName"
                                         value={templateData.templateName}
                                         onChange={handleInputChange}
-                                        placeholder="e.g., Modern Minimalist"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="bedrooms">Number of Bedrooms</label>
-                                    <input
-                                        type="number"
-                                        id="bedrooms"
-                                        name="bedrooms"
-                                        value={templateData.bedrooms}
-                                        onChange={handleInputChange}
-                                        min="1"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="bathrooms">Number of Bathrooms</label>
-                                    <input
-                                        type="number"
-                                        id="bathrooms"
-                                        name="bathrooms"
-                                        value={templateData.bathrooms}
-                                        onChange={handleInputChange}
-                                        min="1"
-                                        step="0.5"
                                         required
                                     />
                                 </div>
@@ -143,19 +146,6 @@ const ConstructionTemplate1 = () => {
                                         value={templateData.squareFeet}
                                         onChange={handleInputChange}
                                         min="500"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="garageCapacity">Garage Capacity</label>
-                                    <input
-                                        type="number"
-                                        id="garageCapacity"
-                                        name="garageCapacity"
-                                        value={templateData.garageCapacity}
-                                        onChange={handleInputChange}
-                                        min="0"
                                         required
                                     />
                                 </div>
@@ -223,16 +213,18 @@ const ConstructionTemplate1 = () => {
                                         name="image"
                                         onChange={handleImageChange}
                                         accept="image/*"
-                                        required
+                                        required={!editingTemplate}
                                     />
                                 </div>
                             </div>
 
                             <div className="form-buttons">
-                                <button type="submit">Create Template</button>
+                                <button type="submit">
+                                    {editingTemplate ? 'Save Changes' : 'Create Template'}
+                                </button>
                                 <button 
                                     type="button" 
-                                    onClick={() => setIsFormVisible(false)}
+                                    onClick={resetForm}
                                     className="cancel-btn"
                                 >
                                     Cancel
@@ -245,20 +237,35 @@ const ConstructionTemplate1 = () => {
 
             <div className="templates-list">
                 {templates.map(template => (
-                    <div key={template.id} className="template-card">
+                    <div 
+                        key={template.id} 
+                        id={`template-${template.id}`}
+                        className="template-card"
+                    >
                         <div className="template-image">
                             <img src={template.image} alt={template.templateName} />
                         </div>
                         <div className="template-details">
                             <h3>{template.templateName}</h3>
-                            <p>Bedrooms: {template.bedrooms}</p>
-                            <p>Bathrooms: {template.bathrooms}</p>
                             <p>Square Feet: {template.squareFeet}</p>
-                            <p>Garage Capacity: {template.garageCapacity}</p>
                             <p>Base Cost: ${template.baseCost}</p>
                             <p>Material Cost: {template.materialCostPercent}%</p>
                             <p>Labor Cost: {template.laborCostPercent}%</p>
                             <p>Profit: {template.profitPercentage}%</p>
+                        </div>
+                        <div className="template-card-actions">
+                            <button 
+                                className="edit-btn"
+                                onClick={() => handleEdit(template)}
+                            >
+                                Edit
+                            </button>
+                            <button 
+                                className="delete-btn"
+                                onClick={() => handleDelete(template.id)}
+                            >
+                                Delete
+                            </button>
                         </div>
                     </div>
                 ))}
