@@ -14,12 +14,12 @@ const ConstructionTemplate1 = () => {
     const [editingTemplate, setEditingTemplate] = useState(null);
     const [templateData, setTemplateData] = useState({
         templateName: '',
-        squareFeet: '',
         baseCost: '',
         materialCostPercent: '',
         laborCostPercent: '',
         profitPercentage: '',
-        image: null
+        image: '',
+        description: ''
     });
 
     const handleInputChange = (e) => {
@@ -27,34 +27,19 @@ const ConstructionTemplate1 = () => {
         setTemplateData(prev => {
             const updatedTemplate = { ...prev, [name]: value };
             
-            const totalPercentage = 
-                Number(updatedTemplate.materialCostPercent || 0) +
-                Number(updatedTemplate.laborCostPercent || 0) +
-                Number(updatedTemplate.profitPercentage || 0);
-
-            if (totalPercentage > 100 && 
-                (name === 'materialCostPercent' || 
-                 name === 'laborCostPercent' || 
-                 name === 'profitPercentage')) {
-                return prev;
+            if (name === 'materialCostPercent' || name === 'laborCostPercent') {
+                const materialCost = Number(name === 'materialCostPercent' ? value : updatedTemplate.materialCostPercent) || 0;
+                const laborCost = Number(name === 'laborCostPercent' ? value : updatedTemplate.laborCostPercent) || 0;
+                
+                if (materialCost + laborCost > 100) {
+                    return prev;
+                }
+                
+                updatedTemplate.profitPercentage = Math.max(0, 100 - materialCost - laborCost);
             }
 
             return updatedTemplate;
         });
-    };
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setTemplateData(prev => ({
-                    ...prev,
-                    image: reader.result
-                }));
-            };
-            reader.readAsDataURL(file);
-        }
     };
 
     const handleEdit = (template) => {
@@ -96,12 +81,12 @@ const ConstructionTemplate1 = () => {
     const resetForm = () => {
         setTemplateData({
             templateName: '',
-            squareFeet: '',
             baseCost: '',
             materialCostPercent: '',
             laborCostPercent: '',
             profitPercentage: '',
-            image: null
+            image: '',
+            description: ''
         });
         setEditingTemplate(null);
         setIsFormVisible(false);
@@ -124,99 +109,107 @@ const ConstructionTemplate1 = () => {
                     <div className="template-form-overlay">
                         <form className="template-form" onSubmit={handleSubmit}>
                             <h3>{editingTemplate ? 'Edit Template' : 'Create New Template'}</h3>
-                            <div className="form-grid">
-                                <div className="form-group">
-                                    <label htmlFor="templateName">Template Name</label>
-                                    <input
-                                        type="text"
-                                        id="templateName"
-                                        name="templateName"
-                                        value={templateData.templateName}
-                                        onChange={handleInputChange}
-                                        required
-                                    />
+                            
+                            <div className="form-group">
+                                <label htmlFor="templateName">Template Name</label>
+                                <input
+                                    type="text"
+                                    id="templateName"
+                                    name="templateName"
+                                    value={templateData.templateName}
+                                    onChange={handleInputChange}
+                                    placeholder='Enter Template Name'
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="description">Description</label>
+                                <textarea
+                                    id="description"
+                                    name="description"
+                                    value={templateData.description}
+                                    onChange={handleInputChange}
+                                    placeholder='Enter Description'
+                                    rows="3"
+                                    className="description-textarea"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group">
+                                <label htmlFor="image">House Image URL</label>
+                                <input
+                                    type="url"
+                                    id="image"
+                                    name="image"
+                                    value={templateData.image}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter image URL"
+                                    required
+                                />
+                            </div>
+
+                            <div className="form-group">
+                                <label htmlFor="baseCost">Base Cost ($)</label>
+                                <input
+                                    type="number"
+                                    id="baseCost"
+                                    name="baseCost"
+                                    value={templateData.baseCost}
+                                    onChange={handleInputChange}
+                                    placeholder='Enter Base Cost'
+                                    min="0"
+                                    required
+                                />
+                            </div>
+
+                            <div className="cost-container">
+                                <div className="cost-row">
+                                    <div className="form-group">
+                                        <label htmlFor="materialCostPercent">Material Cost (%)</label>
+                                        <input
+                                            type="number"
+                                            id="materialCostPercent"
+                                            name="materialCostPercent"
+                                            value={templateData.materialCostPercent}
+                                            onChange={handleInputChange}
+                                            placeholder='Enter Material Cost'
+                                            min="0"
+                                            max="100"
+                                            required
+                                        />
+                                    </div>
+
+                                    <div className="form-group">
+                                        <label htmlFor="laborCostPercent">Labor Cost (%)</label>
+                                        <input
+                                            type="number"
+                                            id="laborCostPercent"
+                                            name="laborCostPercent"
+                                            value={templateData.laborCostPercent}
+                                            onChange={handleInputChange}
+                                            placeholder='Enter Labor Cost'
+                                            min="0"
+                                            max="100"
+                                            required
+                                        />
+                                    </div>
                                 </div>
 
-                                <div className="form-group">
-                                    <label htmlFor="squareFeet">Square Feet</label>
-                                    <input
-                                        type="number"
-                                        id="squareFeet"
-                                        name="squareFeet"
-                                        value={templateData.squareFeet}
-                                        onChange={handleInputChange}
-                                        min="500"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="baseCost">Base Cost ($)</label>
-                                    <input
-                                        type="number"
-                                        id="baseCost"
-                                        name="baseCost"
-                                        value={templateData.baseCost}
-                                        onChange={handleInputChange}
-                                        min="0"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="materialCostPercent">Material Cost (%)</label>
-                                    <input
-                                        type="number"
-                                        id="materialCostPercent"
-                                        name="materialCostPercent"
-                                        value={templateData.materialCostPercent}
-                                        onChange={handleInputChange}
-                                        min="0"
-                                        max="100"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="laborCostPercent">Labor Cost (%)</label>
-                                    <input
-                                        type="number"
-                                        id="laborCostPercent"
-                                        name="laborCostPercent"
-                                        value={templateData.laborCostPercent}
-                                        onChange={handleInputChange}
-                                        min="0"
-                                        max="100"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="form-group">
+                                <div className="form-group profit-group">
                                     <label htmlFor="profitPercentage">Profit (%)</label>
                                     <input
                                         type="number"
                                         id="profitPercentage"
                                         name="profitPercentage"
                                         value={templateData.profitPercentage}
-                                        onChange={handleInputChange}
-                                        min="0"
-                                        max="100"
-                                        required
-                                    />
-                                </div>
-
-                                <div className="form-group">
-                                    <label htmlFor="image">House Image</label>
-                                    <input
-                                        type="file"
-                                        id="image"
-                                        name="image"
-                                        onChange={handleImageChange}
-                                        accept="image/*"
-                                        required={!editingTemplate}
+                                        readOnly
+                                        disabled
                                     />
                                 </div>
                             </div>
+
+                            
 
                             <div className="form-buttons">
                                 <button type="submit">
@@ -247,7 +240,7 @@ const ConstructionTemplate1 = () => {
                         </div>
                         <div className="template-details">
                             <h3>{template.templateName}</h3>
-                            <p>Square Feet: {template.squareFeet}</p>
+                            <p className="description">{template.description}</p>
                             <p>Base Cost: ${template.baseCost}</p>
                             <p>Material Cost: {template.materialCostPercent}%</p>
                             <p>Labor Cost: {template.laborCostPercent}%</p>

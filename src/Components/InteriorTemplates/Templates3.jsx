@@ -136,47 +136,49 @@ const Templates3 = () => {
                                 onChange={handleInputChange}
                                 placeholder='Enter description'
                                 rows="3"
+                                className="description-textarea"
                                 required
                             />
                         </div>
-                        <div className="cost-percentages">
-                            <div className="form-group half-width">
-                                <label>Material Cost (%):</label>
+                        <div className="cost-container">
+                            <div className="cost-row">
+                                <div className="form-group">
+                                    <label>Material Cost (%):</label>
+                                    <input 
+                                        type="number"
+                                        name="materialCost"
+                                        value={newTemplate.materialCost}
+                                        onChange={handleInputChange}
+                                        placeholder='Enter material cost percent'
+                                        min="0"
+                                        max="100"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Labor Cost (%):</label>
+                                    <input 
+                                        type="number"
+                                        name="laborCost"
+                                        value={newTemplate.laborCost}
+                                        onChange={handleInputChange}
+                                        placeholder='Enter labor cost percent'
+                                        min="0"
+                                        max="100"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-group profit-group">
+                                <label>Profit (%):</label>
                                 <input 
                                     type="number"
-                                    name="materialCost"
-                                    value={newTemplate.materialCost}
-                                    onChange={handleInputChange}
-                                    placeholder='Enter material cost percent'
-                                    min="0"
-                                    max="100"
-                                    required
+                                    name="profitCost"
+                                    value={newTemplate.profitCost}
+                                    readOnly
+                                    disabled
                                 />
                             </div>
-                            <div className="form-group half-width">
-                                <label>Labor Cost (%):</label>
-                                <input 
-                                    type="number"
-                                    name="laborCost"
-                                    value={newTemplate.laborCost}
-                                    onChange={handleInputChange}
-                                    placeholder='Enter labor cost percent'
-                                    min="0"
-                                    max="100"
-                                    required
-                                />
-                            </div>
-                        </div>
-                        
-                        <div className="form-group">
-                            <label>Profit (%):</label>
-                            <input 
-                                type="number"
-                                name="profitCost"
-                                value={newTemplate.profitCost}
-                                readOnly
-                                disabled
-                            />
                         </div>
                         <div className="form-actions">
                             <button type="submit" className="upload-btn">Upload Template</button>
