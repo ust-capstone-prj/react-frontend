@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Templates1.css';
 
 const Templates1 = () => {
@@ -13,6 +13,15 @@ const Templates1 = () => {
         profitPercent: ''
     });
     const [isFormVisible, setIsFormVisible] = useState(false);
+
+    useEffect(()=>{
+        fetch("http://localhost:8060/api/projectvar/costs/3")
+        .then((response)=> response.json())
+        .then((data)=> {
+            console.log(data)
+            setTemplates([data])})
+        .catch((error)=> console.error("Error fetching variations: ", error));
+    }, [])
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -68,10 +77,10 @@ const Templates1 = () => {
             return response.json()
         })
         // then(({ ProjTypCatVarCatId }) 
-        .then(({projTypCatVarCatId})=>{
+        .then(({projTypCatVarId})=>{
             const MaterialCost = (newTemplate.baseCost * newTemplate.materialCostPercent) / 100;
             const LabourCost = (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
-            const ProfitCost = newTemplate.baseCost - (materialCost + labourCost);
+            const ProfitCost = newTemplate.baseCost - (MaterialCost + LabourCost);
             alert("Template added")
             const requestBody2 = {
                 profitCost: ProfitCost,
@@ -233,15 +242,15 @@ const Templates1 = () => {
                 {templates.map(template => (
                     <div key={template.id} className="template-card">
                         <div className="template-image">
-                            <img src={template.image} alt={template.variationName} />
+                            <img src={template.projTypCatVarImg} alt={template.variationName} />
                         </div>
                         <div className="template-details">
-                            <h3>{template.variationName}</h3>
-                            <p>Base Cost: ₹{template.baseCost}</p>
+                            <h3>{template.projTypCatVarName}</h3>
+                            <p>Base Cost: ₹{template.projTypCatVarCost}</p>
                             <p>Description: {template.description} days</p>
-                            <p>Material Cost: {template.materialCostPercent}%</p>
-                            <p>Labor Cost: {template.laborCostPercent}%</p>
-                            <p>Profit: {template.profitPercent}%</p>
+                            <p>Material Cost: {template.projectCostPojo.materialCost}</p>
+                            <p>Labor Cost: {template.projectCostPojo.labourCost}</p>
+                            <p>Profit: {template.projectCostPojo.profitCost}</p>
                         </div>
                     </div>
                 ))}
