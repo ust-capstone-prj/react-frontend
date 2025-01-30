@@ -15,7 +15,7 @@ const Templates1 = () => {
     const [isFormVisible, setIsFormVisible] = useState(false);
 
     useEffect(()=>{
-        fetch("http://localhost:8060/api/projectvar/costs/3")
+        fetch("http://localhost:8060/api/projectvar/costs/2")
         .then((response)=> response.json())
         .then((data)=> {
             console.log(data)

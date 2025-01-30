@@ -17,9 +17,12 @@ const Templates2 = () => {
     const [isFormVisible, setIsFormVisible] = useState(false);
     
     useEffect(() => {
-        fetch("http://localhost:8060/api/projectvar")
+        fetch("http://localhost:8060/api/projectvar/costs/2")
             .then((response) => response.json())
-            .then((data) => setTemplates(data))
+            .then((data) => {
+                console.log(data)
+                setTemplates([data])})
+            
             .catch((error) => console.error("Error fetching variations:", error));
     }, []);
 
@@ -29,9 +32,9 @@ const Templates2 = () => {
             const updatedTemplate = { ...prev, [name]: value };
             
             if (name === 'materialCostPercent' || name === 'laborCostPercent') {
-                const materialCost = Number(name === 'materialCostPercent' ? value : updatedTemplate.materialCostPercent || 0);
-                const laborCost = Number(name === 'laborCostPercent' ? value : updatedTemplate.laborCostPercent || 0);
-                const profit = 100 - (materialCost + laborCost);
+                const matCost = Number(name === 'materialCostPercent' ? value : updatedTemplate.materialCostPercent || 0);
+                const labCost = Number(name === 'laborCostPercent' ? value : updatedTemplate.laborCostPercent || 0);
+                const profit = 100 - (matCost + labCost);
                 if (profit >= 0) {
                     updatedTemplate.profitPercent = profit;
                 } else {
@@ -42,6 +45,7 @@ const Templates2 = () => {
             return updatedTemplate;
         });
     };
+    
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -58,18 +62,67 @@ const Templates2 = () => {
     };
 
     const handleSubmit = async (e) => {
-        e.preventDefault();
+        const typecatid = 2
+        console.log("value is: ",typecatid)
+        const requestBody1 = {
+            projTypCatVarName: newTemplate.variationName,
+            projTypCatVarCost: newTemplate.baseCost,
+            projTypCatVarImg: newTemplate.image,
+            projTypCatVarDesc: newTemplate.description,
+            projTypCatId: typecatid
+        }
+        // console.log(requestBody1)
+        console.log("Final response body", JSON.stringify(requestBody1))
+        fetch("http://localhost:8060/api/projectvar", {
+            method: "POST",
+            headers: {
+                'Content-Type':'application/json'
+            },
+            body: JSON.stringify(requestBody1)
+        })
+        .then((response)=> {
+            if(!response.ok){
+                alert("Failed to save template")
+                throw new Error("Failed to save template")
+            }
+            return response.json()
+        })
+        // then(({ ProjTypCatVarCatId }) 
+        .then(({projTypCatVarId})=>{
+            const MaterialCost = (newTemplate.baseCost * newTemplate.materialCostPercent) / 100;
+            const LabourCost = (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
+            const ProfitCost = newTemplate.baseCost - (MaterialCost + LabourCost);
+            alert("Template added")
+            const requestBody2 = {
+                profitCost: ProfitCost,
+                labourCost: LabourCost,
+                materialCost: MaterialCost,
+                projTypCatVarId
+            }
+            console.log("requestBody2: ", requestBody2)
+            fetch("http://localhost:8060/api/projectcost", {
+                method: "POST",
+                headers: {
+                    'Content-Type':'application/json'
+                },
+                body: JSON.stringify(requestBody2)
+            })
+            .then((response)=> {
+                if(!response.ok){
+                    alert("Failed to save template")
+                    throw new Error("Failed to save template")
+                }
+                return response.json()
+            })
+            .then((data)=>{
+                alert("Added cost successfully")
+            })
+        })
+
         setTemplates(prev => [...prev, { ...newTemplate, id: Date.now() }]);
-        setNewTemplate({ 
-            image: '', 
-            variationName: '', 
-            baseCost: '', 
-            duration: '', 
-            materialCostPercent: '', 
-            laborCostPercent: '', 
-            profitPercent: '' 
-        });
+        setNewTemplate({ image: '', variationName: '', baseCost: '', description: '', materialCostPercent: '', laborCostPercent: '', profitPercent: '' });
         setIsFormVisible(false);
+        
     };
     
     return (
@@ -122,6 +175,17 @@ const Templates2 = () => {
                             />
                         </div>
                         <div className="form-group">
+                            <label>Design Image URL:</label>
+                            <input 
+                                type="url"
+                                name="image"
+                                value={newTemplate.image}
+                                onChange={handleInputChange}
+                                placeholder="Enter image URL"
+                                required
+                            />
+                        </div>
+                        {/* <div className="form-group">
                             <label>Duration (days):</label>
                             <input 
                                 type="text"
@@ -184,16 +248,18 @@ const Templates2 = () => {
                 {templates.map(template => (
                     <div key={template.id} className="template-card">
                         <div className="template-image">
-                            <img src={template.image} alt={template.variationName} />
+                            <img src={template.projTypCatVarImg} alt={template.projTypCatVarName} />
                         </div>
                         <div className="template-details">
-                            <h3>{template.variationName}</h3>
-                            <p className="description">{template.description}</p>
-                            <p>Base Cost: ₹{template.baseCost}</p>
-                            <p>Duration: {template.duration} days</p>
-                            <p>Material Cost: {template.materialCostPercent}%</p>
-                            <p>Labor Cost: {template.laborCostPercent}%</p>
-                            <p>Profit: {template.profitPercent}%</p>
+                            <h3>{template.projTypCatVarName}</h3>
+                            <p className="description">{template.projTypCatVarDesc}</p>
+                            <p>Base Cost: ₹{template.projTypCatVarCost}</p>
+                            {/* <p>Duration: {template.duration} days</p> */}
+                            <div style={{ display: 'flex', gap: '1rem' }}>
+                                <p>Material Cost: {template.projectCostPojo.materialCost}</p>
+                                <p>Labor Cost: {template.projectCostPojo.labourCost}</p>
+                            </div>
+                            <p>Profit: {template.projectCostPojo.profitCost}</p>
                         </div>
                     </div>
                 ))}
