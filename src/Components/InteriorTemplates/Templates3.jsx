@@ -10,7 +10,7 @@ const Templates3 = () => {
         image: '',
         variationName: '',
         baseCost: '',
-        duration: '',
+        description: '',
         materialCost: '',
         laborCost: '',
         profitCost: ''
@@ -24,32 +24,21 @@ const Templates3 = () => {
                 [name]: value
             };
             
-            // Validate percentage total
-            if (name === 'materialCost' || name === 'laborCost' || name === 'profitCost') {
-                const total = Number(updatedTemplate.materialCost || 0) + 
-                            Number(updatedTemplate.laborCost || 0) + 
-                            Number(updatedTemplate.profitCost || 0);
-                if (total > 100) {
+            // Automatically calculate profit percentage
+            if (name === 'materialCost' || name === 'laborCost') {
+                const materialCost = Number(updatedTemplate.materialCost || 0);
+                const laborCost = Number(updatedTemplate.laborCost || 0);
+                const profitCost = 100 - (materialCost + laborCost);
+                
+                if (profitCost >= 0) {
+                    updatedTemplate.profitCost = profitCost.toString();
+                } else {
                     return prev; // Don't update if total exceeds 100%
                 }
             }
             
             return updatedTemplate;
         });
-    };
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setNewTemplate(prev => ({
-                ...prev,
-                image: reader.result
-            }));
-        };
-        if (file) {
-            reader.readAsDataURL(file);
-        }
     };
 
     const handleDelete = (id) => {
@@ -83,7 +72,7 @@ const Templates3 = () => {
             image: '',
             variationName: '',
             baseCost: '',
-            duration: '',
+            description: '',
             materialCost: '',
             laborCost: '',
             profitCost: ''
@@ -105,15 +94,7 @@ const Templates3 = () => {
             {isFormOpen && (
                 <div className="template-form-overlay">
                     <form onSubmit={handleSubmit} className="template-form">
-                        <div className="form-group">
-                            <label>Design Image:</label>
-                            <input 
-                                type="file" 
-                                accept="image/*"
-                                onChange={handleImageChange}
-                                required
-                            />
-                        </div>
+                       
                         <div className="form-group">
                             <label>Variation Name:</label>
                             <input 
@@ -121,6 +102,7 @@ const Templates3 = () => {
                                 name="variationName"
                                 value={newTemplate.variationName}
                                 onChange={handleInputChange}
+                                placeholder='Enter variation name'
                                 required
                             />
                         </div>
@@ -131,53 +113,69 @@ const Templates3 = () => {
                                 name="baseCost"
                                 value={newTemplate.baseCost}
                                 onChange={handleInputChange}
+                                placeholder='Enter base cost'
                                 required
                             />
                         </div>
                         <div className="form-group">
-                            <label>Duration (days):</label>
+                            <label>Design Image URL:</label>
                             <input 
-                                type="number"
-                                name="duration"
-                                value={newTemplate.duration}
+                                type="url"
+                                name="image"
+                                value={newTemplate.image}
                                 onChange={handleInputChange}
+                                placeholder="Enter image URL"
                                 required
                             />
                         </div>
                         <div className="form-group">
-                            <label>Material Cost (%):</label>
-                            <input 
-                                type="number"
-                                name="materialCost"
-                                value={newTemplate.materialCost}
+                            <label>Description:</label>
+                            <textarea 
+                                name="description"
+                                value={newTemplate.description}
                                 onChange={handleInputChange}
-                                min="0"
-                                max="100"
+                                placeholder='Enter description'
+                                rows="3"
                                 required
                             />
                         </div>
-                        <div className="form-group">
-                            <label>Labor Cost (%):</label>
-                            <input 
-                                type="number"
-                                name="laborCost"
-                                value={newTemplate.laborCost}
-                                onChange={handleInputChange}
-                                min="0"
-                                max="100"
-                                required
-                            />
+                        <div className="cost-percentages">
+                            <div className="form-group half-width">
+                                <label>Material Cost (%):</label>
+                                <input 
+                                    type="number"
+                                    name="materialCost"
+                                    value={newTemplate.materialCost}
+                                    onChange={handleInputChange}
+                                    placeholder='Enter material cost percent'
+                                    min="0"
+                                    max="100"
+                                    required
+                                />
+                            </div>
+                            <div className="form-group half-width">
+                                <label>Labor Cost (%):</label>
+                                <input 
+                                    type="number"
+                                    name="laborCost"
+                                    value={newTemplate.laborCost}
+                                    onChange={handleInputChange}
+                                    placeholder='Enter labor cost percent'
+                                    min="0"
+                                    max="100"
+                                    required
+                                />
+                            </div>
                         </div>
+                        
                         <div className="form-group">
-                            <label>Profit Cost (%):</label>
+                            <label>Profit (%):</label>
                             <input 
                                 type="number"
                                 name="profitCost"
                                 value={newTemplate.profitCost}
-                                onChange={handleInputChange}
-                                min="0"
-                                max="100"
-                                required
+                                readOnly
+                                disabled
                             />
                         </div>
                         <div className="form-actions">
@@ -204,8 +202,8 @@ const Templates3 = () => {
                         <img src={template.image} alt={template.variationName} />
                         <div className="template-details">
                             <h3>{template.variationName}</h3>
+                            <p className="description">{template.description}</p>
                             <p>Cost: ${template.baseCost}</p>
-                            <p>Duration: {template.duration} days</p>
                             <div className="template-actions">
                                 <button 
                                     className="edit-btn"
