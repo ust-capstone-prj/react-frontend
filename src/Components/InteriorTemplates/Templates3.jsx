@@ -1,7 +1,7 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import './Templates3.css';
 const Templates3 = () => {
-   
+
     const [templates, setTemplates] = useState([]);
     const [isFormOpen, setIsFormOpen] = useState(false);
     const [isEditing, setIsEditing] = useState(false);
@@ -16,6 +16,17 @@ const Templates3 = () => {
         profitCost: ''
     });
 
+    useEffect(() => {
+        fetch("http://localhost:8060/api/projectvar/costs/3")
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data)
+                setTemplates([data])
+            })
+
+            .catch((error) => console.error("Error fetching variations:", error));
+    }, []);
+
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewTemplate(prev => {
@@ -23,20 +34,20 @@ const Templates3 = () => {
                 ...prev,
                 [name]: value
             };
-            
+
             // Automatically calculate profit percentage
             if (name === 'materialCost' || name === 'laborCost') {
                 const materialCost = Number(updatedTemplate.materialCost || 0);
                 const laborCost = Number(updatedTemplate.laborCost || 0);
                 const profitCost = 100 - (materialCost + laborCost);
-                
+
                 if (profitCost >= 0) {
                     updatedTemplate.profitCost = profitCost.toString();
                 } else {
                     return prev; // Don't update if total exceeds 100%
                 }
             }
-            
+
             return updatedTemplate;
         });
     };
@@ -44,7 +55,7 @@ const Templates3 = () => {
     const handleDelete = (id) => {
         const element = document.getElementById(`template-${id}`);
         element.classList.add('fade-out');
-        
+
         setTimeout(() => {
             setTemplates(prev => prev.filter(template => template.id !== id));
         }, 300);
@@ -58,33 +69,73 @@ const Templates3 = () => {
     };
 
     const handleSubmit = (e) => {
-        e.preventDefault();
-        if (isEditing) {
-            setTemplates(prev => prev.map(template => 
-                template.id === editingId ? { ...newTemplate, id: editingId } : template
-            ));
-            setIsEditing(false);
-            setEditingId(null);
-        } else {
-            setTemplates(prev => [...prev, { ...newTemplate, id: Date.now() }]);
+        const typecatid = 3
+        console.log("value is: ", typecatid)
+        const requestBody1 = {
+            projTypCatVarName: newTemplate.variationName,
+            projTypCatVarCost: newTemplate.baseCost,
+            projTypCatVarImg: newTemplate.image,
+            projTypCatVarDesc: newTemplate.description,
+            projTypCatId: typecatid
         }
-        setNewTemplate({
-            image: '',
-            variationName: '',
-            baseCost: '',
-            description: '',
-            materialCost: '',
-            laborCost: '',
-            profitCost: ''
-        });
-        setIsFormOpen(false);
+        // console.log(requestBody1)
+        console.log("Final response body", JSON.stringify(requestBody1))
+        fetch("http://localhost:8060/api/projectvar", {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(requestBody1)
+        })
+            .then((response) => {
+                if (!response.ok) {
+                    alert("Failed to save template")
+                    throw new Error("Failed to save template")
+                }
+                return response.json()
+            })
+            // then(({ ProjTypCatVarCatId }) 
+            .then(({ projTypCatVarId }) => {
+                const MaterialCost = (newTemplate.baseCost * newTemplate.materialCostPercent) / 100;
+                const LabourCost = (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
+                const ProfitCost = newTemplate.baseCost - (MaterialCost + LabourCost);
+                alert("Template added")
+                const requestBody2 = {
+                    profitCost: ProfitCost,
+                    labourCost: LabourCost,
+                    materialCost: MaterialCost,
+                    projTypCatVarId
+                }
+                console.log("requestBody2: ", requestBody2)
+                fetch("http://localhost:8060/api/projectcost", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody2)
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            alert("Failed to save template")
+                            throw new Error("Failed to save template")
+                        }
+                        return response.json()
+                    })
+                    .then((data) => {
+                        alert("Added cost successfully")
+                    })
+            })
+
+        setTemplates(prev => [...prev, { ...newTemplate, id: Date.now() }]);
+        setNewTemplate({ image: '', variationName: '', baseCost: '', description: '', materialCostPercent: '', laborCostPercent: '', profitPercent: '' });
+        setIsFormVisible(false);
     };
 
     return (
         <div className="templates-container">
             <h2 className="templates-title">Lighting Design Templates</h2>
-            
-            <button 
+
+            <button
                 className="create-template-btn"
                 onClick={() => setIsFormOpen(true)}
             >
@@ -94,10 +145,10 @@ const Templates3 = () => {
             {isFormOpen && (
                 <div className="template-form-overlay">
                     <form onSubmit={handleSubmit} className="template-form">
-                       
+
                         <div className="form-group">
                             <label>Variation Name:</label>
-                            <input 
+                            <input
                                 type="text"
                                 name="variationName"
                                 value={newTemplate.variationName}
@@ -108,7 +159,7 @@ const Templates3 = () => {
                         </div>
                         <div className="form-group">
                             <label>Base Cost:</label>
-                            <input 
+                            <input
                                 type="number"
                                 name="baseCost"
                                 value={newTemplate.baseCost}
@@ -119,7 +170,7 @@ const Templates3 = () => {
                         </div>
                         <div className="form-group">
                             <label>Design Image URL:</label>
-                            <input 
+                            <input
                                 type="url"
                                 name="image"
                                 value={newTemplate.image}
@@ -130,7 +181,7 @@ const Templates3 = () => {
                         </div>
                         <div className="form-group">
                             <label>Description:</label>
-                            <textarea 
+                            <textarea
                                 name="description"
                                 value={newTemplate.description}
                                 onChange={handleInputChange}
@@ -144,7 +195,7 @@ const Templates3 = () => {
                             <div className="cost-row">
                                 <div className="form-group">
                                     <label>Material Cost (%):</label>
-                                    <input 
+                                    <input
                                         type="number"
                                         name="materialCost"
                                         value={newTemplate.materialCost}
@@ -157,7 +208,7 @@ const Templates3 = () => {
                                 </div>
                                 <div className="form-group">
                                     <label>Labor Cost (%):</label>
-                                    <input 
+                                    <input
                                         type="number"
                                         name="laborCost"
                                         value={newTemplate.laborCost}
@@ -171,7 +222,7 @@ const Templates3 = () => {
                             </div>
                             <div className="form-group profit-group">
                                 <label>Profit (%):</label>
-                                <input 
+                                <input
                                     type="number"
                                     name="profitCost"
                                     value={newTemplate.profitCost}
@@ -182,8 +233,8 @@ const Templates3 = () => {
                         </div>
                         <div className="form-actions">
                             <button type="submit" className="upload-btn">Upload Template</button>
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 className="cancel-btn"
                                 onClick={() => setIsFormOpen(false)}
                             >
@@ -194,32 +245,22 @@ const Templates3 = () => {
                 </div>
             )}
 
-            <div className="templates-grid">
+<div className="templates-list">
                 {templates.map(template => (
-                    <div 
-                        key={template.id} 
-                        id={`template-${template.id}`}
-                        className="template-card"
-                    >
-                        <img src={template.image} alt={template.variationName} />
+                    <div key={template.id} className="template-card">
+                        <div className="template-image">
+                            <img src={template.projTypCatVarImg} alt={template.projTypCatVarName} />
+                        </div>
                         <div className="template-details">
-                            <h3>{template.variationName}</h3>
-                            <p className="description">{template.description}</p>
-                            <p>Cost: ${template.baseCost}</p>
-                            <div className="template-actions">
-                                <button 
-                                    className="edit-btn"
-                                    onClick={() => handleEdit(template)}
-                                >
-                                    Edit
-                                </button>
-                                <button 
-                                    className="delete-btn"
-                                    onClick={() => handleDelete(template.id)}
-                                >
-                                    Delete
-                                </button>
+                            <h3>{template.projTypCatVarName}</h3>
+                            <p className="description">{template.projTypCatVarDesc}</p>
+                            <p>Base Cost: ₹{template.projTypCatVarCost}</p>
+                            {/* <p>Duration: {template.duration} days</p> */}
+                            <div style={{ display: 'flex', gap: '1rem' }}>
+                                <p>Material Cost: {template.projectCostPojo.materialCost}</p>
+                                <p>Labor Cost: {template.projectCostPojo.labourCost}</p>
                             </div>
+                            <p>Profit: {template.projectCostPojo.profitCost}</p>
                         </div>
                     </div>
                 ))}
