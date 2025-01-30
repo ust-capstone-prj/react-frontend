@@ -19,17 +19,20 @@ const Templates1 = () => {
         setNewTemplate(prev => {
             const updatedTemplate = { ...prev, [name]: value };
             
-            // Calculate total percentage for cost fields
+            // If material or labor cost is updated, calculate profit automatically
+            if (name === 'materialCostPercent' || name === 'laborCostPercent') {
+                const materialCost = Number(name === 'materialCostPercent' ? value : updatedTemplate.materialCostPercent || 0);
+                const laborCost = Number(name === 'laborCostPercent' ? value : updatedTemplate.laborCostPercent || 0);
+                const profit = Math.max(0, 100 - materialCost - laborCost);
+                updatedTemplate.profitPercent = profit.toString();
+            }
+
+            // If total would exceed 100%, revert the change
             const totalPercentage = 
                 Number(updatedTemplate.materialCostPercent || 0) +
-                Number(updatedTemplate.laborCostPercent || 0) +
-                Number(updatedTemplate.profitPercent || 0);
+                Number(updatedTemplate.laborCostPercent || 0);
 
-            // If total exceeds 100%, revert the change
-            if (totalPercentage > 100 && 
-                (name === 'materialCostPercent' || 
-                 name === 'laborCostPercent' || 
-                 name === 'profitPercent')) {
+            if (totalPercentage > 100) {
                 return prev;
             }
 
@@ -117,6 +120,31 @@ const Templates1 = () => {
                     <form className="template-form" onSubmit={handleSubmit}>
                         <h3>Create New Template</h3>
                         
+                        
+
+                        <div className="form-group">
+                            <label>Variation Name</label>
+                            <input 
+                                type="text"
+                                name="variationName"
+                                value={newTemplate.variationName}
+                                onChange={handleInputChange}
+                                placeholder="Enter variation name"
+                                required
+                            />
+                        </div>
+
+                        <div className="form-group">
+                            <label>Base Cost (₹)</label>
+                            <input 
+                                type="number"
+                                name="baseCost"
+                                value={newTemplate.baseCost}
+                                onChange={handleInputChange}
+                                placeholder="Enter base cost"
+                                required
+                            />
+                        </div>
                         <div className="form-group">
                             <label>Paint Work Image URL</label>
                             <input 
@@ -130,62 +158,46 @@ const Templates1 = () => {
                         </div>
 
                         <div className="form-group">
-                            <label>Variation Name</label>
-                            <input 
-                                type="text"
-                                name="variationName"
-                                value={newTemplate.variationName}
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Base Cost (₹)</label>
-                            <input 
-                                type="number"
-                                name="baseCost"
-                                value={newTemplate.baseCost}
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div>
-
-                        <div className="form-group">
-                            <label>Description (days)</label>
-                            <input 
-                                type="number"
+                            <label>Description</label>
+                            <textarea 
                                 name="description"
                                 value={newTemplate.description}
                                 onChange={handleInputChange}
+                                placeholder="Enter description"
                                 required
+                                rows="3"
+                                style={{ width: '100%', resize: 'none' }}
                             />
                         </div>
 
-                        <div className="form-group">
-                            <label>Material Cost (%)</label>
-                            <input 
-                                type="number"
-                                name="materialCostPercent"
-                                value={newTemplate.materialCostPercent}
-                                onChange={handleInputChange}
-                                min="0"
-                                max="100"
-                                required
-                            />
-                        </div>
+                        <div className="cost-percentages-container" style={{ display: 'flex', gap: '1rem' }}>
+                            <div className="form-group" style={{ flex: 1 }}>
+                                <label>Material Cost (%)</label>
+                                <input 
+                                    type="number"
+                                    name="materialCostPercent"
+                                    value={newTemplate.materialCostPercent}
+                                    onChange={handleInputChange}
+                                    placeholder="material cost percentage"
+                                    min="0"
+                                    max="100"
+                                    required
+                                />
+                            </div>
 
-                        <div className="form-group">
-                            <label>Labor Cost (%)</label>
-                            <input 
-                                type="number"
-                                name="laborCostPercent"
-                                value={newTemplate.laborCostPercent}
-                                onChange={handleInputChange}
-                                min="0"
-                                max="100"
-                                required
-                            />
+                            <div className="form-group" style={{ flex: 1 }}>
+                                <label>Labor Cost (%)</label>
+                                <input 
+                                    type="number"
+                                    name="laborCostPercent"
+                                    value={newTemplate.laborCostPercent}
+                                    onChange={handleInputChange}
+                                    placeholder="labor cost percentage"
+                                    min="0"
+                                    max="100"
+                                    required
+                                />
+                            </div>
                         </div>
 
                         <div className="form-group">
@@ -198,6 +210,8 @@ const Templates1 = () => {
                                 min="0"
                                 max="100"
                                 required
+                                disabled
+                                style={{ backgroundColor: '#f0f0f0' }}
                             />
                         </div>
 

@@ -81,7 +81,7 @@
 .form-buttons {
     display: flex;
     gap: 1rem;
-    justify-content: flex-end;
+    justify-content: center;
 }
 
 .form-buttons button {
@@ -93,11 +93,13 @@
 }
 
 .form-buttons button[type="submit"] {
+    width: 200px;
     background: #4CAF50;
     color: white;
 }
 
 .form-buttons .cancel-btn {
+    width: 20px;
     background: #ff5252;
     color: white;
 }
@@ -209,4 +211,15 @@
 
 .templates-list::-webkit-scrollbar-thumb:hover {
     background: #555;
+}
+
+textarea {
+    font-family: inherit;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.cost-percentages-container {
+    margin-bottom: 1rem;
 } 

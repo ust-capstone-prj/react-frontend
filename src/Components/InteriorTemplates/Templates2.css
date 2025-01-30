@@ -152,4 +152,93 @@
         padding: 1.5rem;
         width: 95%;
     }
-} 
+}
+
+.cost-percentages {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.half-width {
+    flex: 1;
+}
+
+.template-details .description {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-bottom: 1rem;
+    line-height: 1.4;
+    font-size: 0.95rem;
+    color: #666;
+}
+
+.cost-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    background: #f8f9fa;
+    border-radius: 8px;
+}
+
+.cost-item {
+    flex: 1;
+    text-align: center;
+    padding: 0.5rem;
+}
+
+.cost-item p {
+    margin: 0;
+    font-size: 0.9rem;
+    color: #555;
+}
+
+.cost-item .value {
+    font-weight: bold;
+    color: #333;
+    font-size: 1.1rem;
+}
+
+.profit-display {
+    text-align: right;
+    padding: 0.5rem;
+    margin-top: 0.5rem;
+    color: #28a745;
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+
+.template-details input[disabled] {
+    background-color: #f8f9fa;
+    cursor: not-allowed;
+}
+
+.button-group {
+    display: flex;
+    gap: 1rem;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+}
+
+.upload-btn, .cancel-btn {
+    padding: 0.75rem 1.5rem;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    font-weight: 500;
+    transition: all 0.3s ease;
+}
+
+.upload-btn {
+    background: #6c5ce7;
+    color: white;
+}
+
+.cancel-btn {
+    background: #e74c3c;
+    color: white;
+}
