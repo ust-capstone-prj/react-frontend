@@ -14,17 +14,6 @@ const Templates1 = () => {
     });
     const [isFormVisible, setIsFormVisible] = useState(false);
 
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setNewTemplate(prev => ({ ...prev, image: reader.result }));
-        };
-        if (file) {
-            reader.readAsDataURL(file);
-        }
-    };
-
     const handleInputChange = (e) => {
         const { name, value } = e.target;
         setNewTemplate(prev => {
@@ -129,11 +118,13 @@ const Templates1 = () => {
                         <h3>Create New Template</h3>
                         
                         <div className="form-group">
-                            <label>Paint Work Image</label>
+                            <label>Paint Work Image URL</label>
                             <input 
-                                type="file" 
-                                accept="image/*"
-                                onChange={handleImageChange}
+                                type="url"
+                                name="image"
+                                value={newTemplate.image}
+                                onChange={handleInputChange}
+                                placeholder="Enter image URL"
                                 required
                             />
                         </div>
