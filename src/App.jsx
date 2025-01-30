@@ -24,6 +24,7 @@ import Ceilings from './Components/InteriorTemplatesClient/Ceilings'
 import Lighting from './Components/InteriorTemplatesClient/Lighting'
 import NewHome from './Components/constructionTemplatesClient/NewHome'
 import Renovation from './Components/constructionTemplatesClient/Renovation'
+import ClientLayout from './components/ClientLayout'
 
 // Protected Route Component with role check
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -94,47 +95,61 @@ function App() {
         </ProtectedRoute>
       } />
 
-      {/* Client Routes */}
+      {/* Client Routes with Layout */}
       <Route path="/project-type-client" element={
         <ProtectedRoute allowedRoles={['CLIENT']}>
-          <ProjectTypeClient />
+          <ClientLayout>
+            <ProjectTypeClient />
+          </ClientLayout>
         </ProtectedRoute>
       } />
       <Route path="/interior-categories" element={
         <ProtectedRoute allowedRoles={['CLIENT']}>
-          <ProjectTypeCategoryClient />
+          <ClientLayout>
+            <ProjectTypeCategoryClient />
+          </ClientLayout>
         </ProtectedRoute>
       } />
       <Route path="/construction-categories" element={
         <ProtectedRoute allowedRoles={['CLIENT']}>
-          <ProjectTypeCategory1Client />
+          <ClientLayout>
+            <ProjectTypeCategory1Client />
+          </ClientLayout>
         </ProtectedRoute>
       } />
       <Route path="/interior/paints" element={
         <ProtectedRoute allowedRoles={['CLIENT']}>
-          <Paints />
+          <ClientLayout>
+            <Paints />
+          </ClientLayout>
         </ProtectedRoute>
       } />
       <Route path="/interior/ceilings" element={
         <ProtectedRoute allowedRoles={['CLIENT']}>
-          <Ceilings />
+          <ClientLayout>
+            <Ceilings />
+          </ClientLayout>
         </ProtectedRoute>
       } />
       <Route path="/interior/lighting" element={
         <ProtectedRoute allowedRoles={['CLIENT']}>
-          <Lighting />
+          <ClientLayout>
+            <Lighting />
+          </ClientLayout>
         </ProtectedRoute>
       } />
-
-      {/* Construction Routes */}
       <Route path="/new-home" element={
         <ProtectedRoute allowedRoles={['CLIENT']}>
-          <NewHome />
+          <ClientLayout>
+            <NewHome />
+          </ClientLayout>
         </ProtectedRoute>
       } />
       <Route path="/renovation" element={
         <ProtectedRoute allowedRoles={['CLIENT']}>
-          <Renovation />
+          <ClientLayout>
+            <Renovation />
+          </ClientLayout>
         </ProtectedRoute>
       } />
 

@@ -1,0 +1,71 @@
+.header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background-color: #56afd8;
+  box-shadow: 0 2px 4px rgba(223, 16, 16, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0 20px;
+  z-index: 1000;
+}
+
+.logo {
+  font-size: 50px;
+  font-weight: bolder;
+}
+
+.profile-container {
+  position: relative;
+}
+
+.profile-icon {
+  cursor: pointer;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 10px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.username {
+  padding: 5px 10px;
+  border-bottom: 1px solid #eee;
+}
+
+.logout-btn {
+  width: 100%;
+  padding: 5px 10px;
+  margin-top: 5px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  text-align: left;
+  color: #ff4444;
+}
+
+.logout-btn:hover {
+  background-color: #f8f8f8;
+}
+
+.logo-text {
+  font-size: 50px;
+  font-weight: bolder;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  text-transform: uppercase;
+}
+
+.logo-image {
+  height: 40px; /* Adjust this value to match your desired logo size */
+  width: auto;
+} 
