@@ -52,6 +52,7 @@ const Login = () => {
                 // Store the auth token and role
                 sessionStorage.setItem("authToken", token);
                 sessionStorage.setItem("userRole", roleName);
+                sessionStorage.setItem("username", username);
 
                 // Navigate based on role
                 if (roleName === "CONTRACTOR") {
