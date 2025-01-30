@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './Paints.css';
 
@@ -10,7 +10,27 @@ const Paints = () => {
     const [showPhoneModal, setShowPhoneModal] = useState(false);
     const [showSuccessModal, setShowSuccessModal] = useState(false);
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [templates, setTemplates] = useState([]);
+
     const navigate = useNavigate();
+
+    useEffect(() => {
+        fetch("http://localhost:8060/api/projectvar/newcosts/3")
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
+                const transformedData = data.map((template) => ({
+                    id: template.projTypCatVarId,  // using projTypCatVarId as the ID
+                    name: template.projTypCatVarName,
+                    pricePerSqFt: template.projTypCatVarCost,  // using projTypCatVarCost as price
+                    image: template.projTypCatVarImg,
+                    description: template.projTypCatVarDesc,
+                }));
+                setTemplates(transformedData);
+            })
+            .catch((error) => console.error("Error fetching variations: ", error));
+    }, []);
+
 
     const paintTemplates = [
         {
@@ -66,8 +86,8 @@ const Paints = () => {
     return (
         <div className="paints-container">
             <h1 className="paints-title">Premium Paint Templates</h1>
-            
-            <div className="templates-grid">
+
+            {/* <div className="templates-grid">
                 {paintTemplates.map((template) => (
                     <div key={template.id} className="template-card">
                         <div className="template-image">
@@ -91,7 +111,29 @@ const Paints = () => {
                         </div>
                     </div>
                 ))}
+            </div> */}
+
+            <div className="templates-grid">
+                {templates.map((template) => (
+                    <div key={template.id} className="template-card">
+                        <div className="template-image">
+                            <img src={template.image} alt={template.name} />
+                        </div>
+                        <div className="template-content">
+                            <h2>{template.name}</h2>
+                            <p className="price">₹{template.pricePerSqFt}/sq.ft</p>
+                            <p className="description">{template.description}</p>
+                            <button
+                                className="select-btn"
+                                onClick={() => handleSelect(template)}
+                            >
+                                Select Template
+                            </button>
+                        </div>
+                    </div>
+                ))}
             </div>
+
 
             {/* Square Feet Modal */}
             {showModal && (
@@ -147,7 +189,7 @@ const Paints = () => {
                         {phoneNumber.length < 10 && phoneNumber.length > 0 && (
                             <p className="error-message">Please enter a valid 10-digit number</p>
                         )}
-                        <button 
+                        <button
                             className={`confirm-btn ${phoneNumber.length === 10 ? 'active' : ''}`}
                             onClick={handlePhoneSubmit}
                             disabled={phoneNumber.length !== 10}
