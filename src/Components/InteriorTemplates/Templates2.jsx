@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import './Templates1.css';
-import { useEffect } from'react';``
+import { useEffect } from 'react'; ``
 
 const Templates2 = () => {
     const [templates, setTemplates] = useState([]);
@@ -15,14 +15,15 @@ const Templates2 = () => {
         profitPercent: ''
     });
     const [isFormVisible, setIsFormVisible] = useState(false);
-    
+
     useEffect(() => {
         fetch("http://localhost:8060/api/projectvar/costs/2")
             .then((response) => response.json())
             .then((data) => {
                 console.log(data)
-                setTemplates([data])})
-            
+                setTemplates([data])
+            })
+
             .catch((error) => console.error("Error fetching variations:", error));
     }, []);
 
@@ -30,7 +31,7 @@ const Templates2 = () => {
         const { name, value } = e.target;
         setNewTemplate(prev => {
             const updatedTemplate = { ...prev, [name]: value };
-            
+
             if (name === 'materialCostPercent' || name === 'laborCostPercent') {
                 const matCost = Number(name === 'materialCostPercent' ? value : updatedTemplate.materialCostPercent || 0);
                 const labCost = Number(name === 'laborCostPercent' ? value : updatedTemplate.laborCostPercent || 0);
@@ -45,7 +46,7 @@ const Templates2 = () => {
             return updatedTemplate;
         });
     };
-    
+
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -61,9 +62,10 @@ const Templates2 = () => {
         }
     };
 
-    const handleSubmit = async (e) => {
-        const typecatid = 2
-        console.log("value is: ",typecatid)
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const typecatid = 2 //ceiling id
+        console.log("value is: ", typecatid)
         const requestBody1 = {
             projTypCatVarName: newTemplate.variationName,
             projTypCatVarCost: newTemplate.baseCost,
@@ -76,60 +78,59 @@ const Templates2 = () => {
         fetch("http://localhost:8060/api/projectvar", {
             method: "POST",
             headers: {
-                'Content-Type':'application/json'
+                'Content-Type': 'application/json'
             },
             body: JSON.stringify(requestBody1)
         })
-        .then((response)=> {
-            if(!response.ok){
-                alert("Failed to save template")
-                throw new Error("Failed to save template")
-            }
-            return response.json()
-        })
-        // then(({ ProjTypCatVarCatId }) 
-        .then(({projTypCatVarId})=>{
-            const MaterialCost = (newTemplate.baseCost * newTemplate.materialCostPercent) / 100;
-            const LabourCost = (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
-            const ProfitCost = newTemplate.baseCost - (MaterialCost + LabourCost);
-            alert("Template added")
-            const requestBody2 = {
-                profitCost: ProfitCost,
-                labourCost: LabourCost,
-                materialCost: MaterialCost,
-                projTypCatVarId
-            }
-            console.log("requestBody2: ", requestBody2)
-            fetch("http://localhost:8060/api/projectcost", {
-                method: "POST",
-                headers: {
-                    'Content-Type':'application/json'
-                },
-                body: JSON.stringify(requestBody2)
-            })
-            .then((response)=> {
-                if(!response.ok){
+            .then((response) => {
+                if (!response.ok) {
                     alert("Failed to save template")
                     throw new Error("Failed to save template")
                 }
                 return response.json()
             })
-            .then((data)=>{
-                alert("Added cost successfully")
+            // then(({ ProjTypCatVarCatId }) 
+            .then(({ projTypCatVarId }) => {
+                const MaterialCost = (newTemplate.baseCost * newTemplate.materialCostPercent) / 100;
+                const LabourCost = (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
+                const ProfitCost = newTemplate.baseCost - (MaterialCost + LabourCost);
+                alert("Template added")
+                const requestBody2 = {
+                    profitCost: ProfitCost,
+                    labourCost: LabourCost,
+                    materialCost: MaterialCost,
+                    projTypCatVarId
+                }
+                console.log("requestBody2: ", requestBody2)
+                fetch("http://localhost:8060/api/projectcost", {
+                    method: "POST",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(requestBody2)
+                })
+                    .then((response) => {
+                        if (!response.ok) {
+                            alert("Failed to save template")
+                            throw new Error("Failed to save template")
+                        }
+                        return response.json()
+                    })
+                    .then((data) => {
+                        alert("Added cost successfully")
+                    })
             })
-        })
 
         setTemplates(prev => [...prev, { ...newTemplate, id: Date.now() }]);
         setNewTemplate({ image: '', variationName: '', baseCost: '', description: '', materialCostPercent: '', laborCostPercent: '', profitPercent: '' });
         setIsFormVisible(false);
-        
     };
-    
+
     return (
         <div className="templates-container">
             <h2 className="templates-title">Ceiling Design Templates</h2>
-            
-            <button 
+
+            <button
                 className="create-template-btn"
                 onClick={() => setIsFormVisible(true)}
             >
@@ -139,10 +140,10 @@ const Templates2 = () => {
             {isFormVisible && (
                 <div className="template-form-overlay">
                     <form onSubmit={handleSubmit} className="template-form">
-                        
+
                         <div className="form-group">
                             <label>Variation Name:</label>
-                            <input 
+                            <input
                                 type="text"
                                 name="variationName"
                                 value={newTemplate.variationName}
@@ -153,7 +154,7 @@ const Templates2 = () => {
                         </div>
                         <div className="form-group">
                             <label>Description:</label>
-                            <textarea 
+                            <textarea
                                 name="description"
                                 value={newTemplate.description}
                                 onChange={handleInputChange}
@@ -165,7 +166,7 @@ const Templates2 = () => {
                         </div>
                         <div className="form-group">
                             <label>Base Cost:</label>
-                            <input 
+                            <input
                                 type="number"
                                 name="baseCost"
                                 value={newTemplate.baseCost}
@@ -176,7 +177,7 @@ const Templates2 = () => {
                         </div>
                         <div className="form-group">
                             <label>Design Image URL:</label>
-                            <input 
+                            <input
                                 type="url"
                                 name="image"
                                 value={newTemplate.image}
@@ -185,20 +186,10 @@ const Templates2 = () => {
                                 required
                             />
                         </div>
-                        {/* <div className="form-group">
-                            <label>Duration (days):</label>
-                            <input 
-                                type="text"
-                                name="description"
-                                value={newTemplate.description}
-                                onChange={handleInputChange}
-                                required
-                            />
-                        </div> */}
                         <div className="form-row" style={{ display: 'flex', gap: '1rem' }}>
                             <div className="form-group" style={{ flex: 1 }}>
                                 <label>Material Cost Percent:</label>
-                                <input 
+                                <input
                                     type="number"
                                     name="materialCostPercent"
                                     value={newTemplate.materialCostPercent}
@@ -209,7 +200,7 @@ const Templates2 = () => {
                             </div>
                             <div className="form-group" style={{ flex: 1 }}>
                                 <label>Labor Cost Percent:</label>
-                                <input 
+                                <input
                                     type="number"
                                     name="laborCostPercent"
                                     value={newTemplate.laborCostPercent}
@@ -221,7 +212,7 @@ const Templates2 = () => {
                         </div>
                         <div className="form-group">
                             <label>Profit Percent:</label>
-                            <input 
+                            <input
                                 type="number"
                                 name="profitPercent"
                                 value={newTemplate.profitPercent}
@@ -232,8 +223,8 @@ const Templates2 = () => {
                         </div>
                         <div className="button-group">
                             <button type="submit" className="upload-btn">Upload Template</button>
-                            <button 
-                                type="button" 
+                            <button
+                                type="button"
                                 className="cancel-btn"
                                 onClick={() => setIsFormVisible(false)}
                             >
@@ -246,20 +237,17 @@ const Templates2 = () => {
 
             <div className="templates-list">
                 {templates.map(template => (
-                    <div key={template.id} className="template-card">
+                    <div key={template.projTypCatVarId} className="template-card">
                         <div className="template-image">
                             <img src={template.projTypCatVarImg} alt={template.projTypCatVarName} />
                         </div>
                         <div className="template-details">
                             <h3>{template.projTypCatVarName}</h3>
-                            <p className="description">{template.projTypCatVarDesc}</p>
-                            <p>Base Cost: ₹{template.projTypCatVarCost}</p>
-                            {/* <p>Duration: {template.duration} days</p> */}
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                <p>Material Cost: {template.projectCostPojo.materialCost}</p>
-                                <p>Labor Cost: {template.projectCostPojo.labourCost}</p>
-                            </div>
-                            <p>Profit: {template.projectCostPojo.profitCost}</p>
+                            <p>Description: {template.projTypCatVarDesc}</p>
+                            <p>Cost/SqFt: ₹{template.projTypCatVarCost}</p>
+                            <p>Material Cost/SqFt: {template.projectCostPojo.materialCost}</p>
+                            <p>Labour Cost/SqFt: {template.projectCostPojo.labourCost}</p>
+                            <p>Profit/SqFt: {template.projectCostPojo.profitCost}</p>
                         </div>
                     </div>
                 ))}

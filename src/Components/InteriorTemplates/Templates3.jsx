@@ -17,15 +17,14 @@ const Templates3 = () => {
     });
 
     useEffect(() => {
-        fetch("http://localhost:8060/api/projectvar/costs/3")
+        fetch("http://localhost:8060/api/projectvar/newcosts/1")
             .then((response) => response.json())
             .then((data) => {
                 console.log(data)
-                setTemplates([data])
+                setTemplates(data)
             })
-
-            .catch((error) => console.error("Error fetching variations:", error));
-    }, []);
+            .catch((error) => console.error("Error fetching variations: ", error));
+    }, [])
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -69,7 +68,8 @@ const Templates3 = () => {
     };
 
     const handleSubmit = (e) => {
-        const typecatid = 3
+        e.preventDefault();
+        const typecatid = 1 //lighting id
         console.log("value is: ", typecatid)
         const requestBody1 = {
             projTypCatVarName: newTemplate.variationName,
@@ -245,22 +245,19 @@ const Templates3 = () => {
                 </div>
             )}
 
-<div className="templates-list">
+            <div className="templates-list">
                 {templates.map(template => (
-                    <div key={template.id} className="template-card">
+                    <div key={template.projTypCatVarId} className="template-card">
                         <div className="template-image">
                             <img src={template.projTypCatVarImg} alt={template.projTypCatVarName} />
                         </div>
                         <div className="template-details">
                             <h3>{template.projTypCatVarName}</h3>
-                            <p className="description">{template.projTypCatVarDesc}</p>
-                            <p>Base Cost: ₹{template.projTypCatVarCost}</p>
-                            {/* <p>Duration: {template.duration} days</p> */}
-                            <div style={{ display: 'flex', gap: '1rem' }}>
-                                <p>Material Cost: {template.projectCostPojo.materialCost}</p>
-                                <p>Labor Cost: {template.projectCostPojo.labourCost}</p>
-                            </div>
-                            <p>Profit: {template.projectCostPojo.profitCost}</p>
+                            <p>Description: {template.projTypCatVarDesc}</p>
+                            <p>Cost/SqFt: ₹{template.projTypCatVarCost}</p>
+                            <p>Material Cost/SqFt: {template.projectCostPojo.materialCost}</p>
+                            <p>Labour Cost/SqFt: {template.projectCostPojo.labourCost}</p>
+                            <p>Profit/SqFt: {template.projectCostPojo.profitCost}</p>
                         </div>
                     </div>
                 ))}
