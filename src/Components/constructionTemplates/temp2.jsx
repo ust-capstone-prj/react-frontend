@@ -9,9 +9,11 @@ const Temp2 = () => {
     });
     const [formData, setFormData] = useState({
         image: '',
-        name: '',
+        variationName: '',
         baseCost: '',
-        percentage: '',
+        materialCost: '',
+        laborCost: '',
+        profitCost: '',
         description: ''
     });
     const [editingCard, setEditingCard] = useState(null);
@@ -21,9 +23,11 @@ const Temp2 = () => {
         setEditingCard(null);
         setFormData({
             image: '',
-            name: '',
+            variationName: '',
             baseCost: '',
-            percentage: '',
+            materialCost: '',
+            laborCost: '',
+            profitCost: '',
             description: ''
         });
     };
@@ -42,24 +46,28 @@ const Temp2 = () => {
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prev => ({
-            ...prev,
-            [name]: value
-        }));
-    };
-
-    const handleImageUpload = (e) => {
-        const file = e.target.files[0];
-        const reader = new FileReader();
-        reader.onloadend = () => {
-            setFormData(prev => ({
+        setFormData(prev => {
+            const updatedData = {
                 ...prev,
-                image: reader.result
-            }));
-        };
-        if (file) {
-            reader.readAsDataURL(file);
-        }
+                [name]: value
+            };
+            
+            // Calculate profit cost when material or labor cost changes
+            if (name === 'materialCost' || name === 'laborCost') {
+                const materialCost = parseFloat(name === 'materialCost' ? value : prev.materialCost) || 0;
+                const laborCost = parseFloat(name === 'laborCost' ? value : prev.laborCost) || 0;
+                
+                // Ensure total costs don't exceed 100%
+                if (materialCost + laborCost > 100) {
+                    alert("Material and Labor costs combined cannot exceed 100%");
+                    return prev;
+                }
+                
+                updatedData.profitCost = 100 - (materialCost + laborCost);
+            }
+            
+            return updatedData;
+        });
     };
 
     const handleSubmit = (e) => {
@@ -81,9 +89,11 @@ const Temp2 = () => {
 
         setFormData({
             image: '',
-            name: '',
+            variationName: '',
             baseCost: '',
-            percentage: '',
+            materialCost: '',
+            laborCost: '',
+            profitCost: '',
             description: ''
         });
         setShowForm(false);
@@ -92,57 +102,116 @@ const Temp2 = () => {
 
     return (
         <div className="temp2-container">
+            <h2 className="templates-title">Renovation Design Templates</h2>
+            
             <button 
-                className="create-button"
+                className="create-template-btn"
                 onClick={handleCreateCard}
                 disabled={showForm}
             >
-                Create New Card
+                Create New Template
             </button>
 
             {showForm && (
-                <div className="form-overlay">
-                    <form className="card-form" onSubmit={handleSubmit}>
-                        <input
-                            type="file"
-                            accept="image/*"
-                            onChange={handleImageUpload}
-                            required={!editingCard}
-                        />
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Card Name"
-                            value={formData.name}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        <input
-                            type="number"
-                            name="baseCost"
-                            placeholder="Base Cost"
-                            value={formData.baseCost}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        <input
-                            type="number"
-                            name="percentage"
-                            placeholder="Percentage"
-                            value={formData.percentage}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        <textarea
-                            name="description"
-                            placeholder="Description"
-                            value={formData.description}
-                            onChange={handleInputChange}
-                            required
-                        />
-                        <button type="submit">
-                            {editingCard ? 'Update Card' : 'Create Card'}
-                        </button>
+                <div className="template-form-overlay">
+                    <form onSubmit={handleSubmit} className="template-form">
+                        <div className="form-group">
+                            <label>Variation Name:</label>
+                            <input 
+                                type="text"
+                                name="variationName"
+                                value={formData.variationName}
+                                onChange={handleInputChange}
+                                placeholder='Enter variation name'
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Base Cost:</label>
+                            <input 
+                                type="number"
+                                name="baseCost"
+                                value={formData.baseCost}
+                                onChange={handleInputChange}
+                                placeholder='Enter base cost'
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Design Image URL:</label>
+                            <input 
+                                type="url"
+                                name="image"
+                                value={formData.image}
+                                onChange={handleInputChange}
+                                placeholder="Enter image URL"
+                                required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Description:</label>
+                            <textarea 
+                                name="description"
+                                value={formData.description}
+                                onChange={handleInputChange}
+                                placeholder='Enter description'
+                                rows="3"
+                                className="description-textarea"
+                                required
+                            />
+                        </div>
+                        <div className="cost-container">
+                            <div className="cost-row">
+                                <div className="form-group">
+                                    <label>Material Cost (%):</label>
+                                    <input 
+                                        type="number"
+                                        name="materialCost"
+                                        value={formData.materialCost}
+                                        onChange={handleInputChange}
+                                        placeholder='Enter material cost percent'
+                                        min="0"
+                                        max="100"
+                                        required
+                                    />
+                                </div>
+                                <div className="form-group">
+                                    <label>Labor Cost (%):</label>
+                                    <input 
+                                        type="number"
+                                        name="laborCost"
+                                        value={formData.laborCost}
+                                        onChange={handleInputChange}
+                                        placeholder='Enter labor cost percent'
+                                        min="0"
+                                        max="100"
+                                        required
+                                    />
+                                </div>
+                            </div>
+                            <div className="form-group profit-group">
+                                <label>Profit (%):</label>
+                                <input 
+                                    type="number"
+                                    name="profitCost"
+                                    value={formData.profitCost}
+                                    readOnly
+                                    disabled
+                                />
+                            </div>
+                        </div>
+                        <div className="form-actions">
+                            <button type="submit" className="upload-btn">
+                                {editingCard ? 'Update Template' : 'Upload Template'}
+                            </button>
+                            <button 
+                                type="button" 
+                                className="cancel-btn"
+                                onClick={() => setShowForm(false)}
+                            >
+                                Cancel
+                            </button>
+                        </div>
                     </form>
                 </div>
             )}
@@ -150,10 +219,9 @@ const Temp2 = () => {
             <div className="cards-container">
                 {cards.map((card, index) => (
                     <div key={index} className="card">
-                        <img src={card.image} alt={card.name} />
-                        <h3>{card.name}</h3>
+                        <img src={card.image} alt={card.variationName} />
+                        <h3>{card.variationName}</h3>
                         <p className="cost">Base Cost: ${card.baseCost}</p>
-                        <p className="percentage">Percentage: {card.percentage}%</p>
                         <p className="description">{card.description}</p>
                         <div className="card-actions">
                             <button 
