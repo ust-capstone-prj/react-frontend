@@ -147,25 +147,26 @@ const Templates3 = () => {
                     <form onSubmit={handleSubmit} className="template-form">
 
                         <div className="form-group">
-                            <label>Variation Name:</label>
+                            <label>Design Name:</label>
                             <input
                                 type="text"
                                 name="variationName"
                                 value={newTemplate.variationName}
                                 onChange={handleInputChange}
-                                placeholder='Enter variation name'
+                                placeholder='Enter Design name'
                                 required
                             />
                         </div>
                         <div className="form-group">
-                            <label>Base Cost:</label>
+                            <label>Cost/SqFt:</label>
                             <input
                                 type="number"
                                 name="baseCost"
                                 value={newTemplate.baseCost}
                                 onChange={handleInputChange}
-                                placeholder='Enter base cost'
+                                placeholder='Enter Cost/SqFt'
                                 required
+                                min="0"
                             />
                         </div>
                         <div className="form-group">
@@ -175,7 +176,7 @@ const Templates3 = () => {
                                 name="image"
                                 value={newTemplate.image}
                                 onChange={handleInputChange}
-                                placeholder="Enter image URL"
+                                placeholder="Enter Image URL"
                                 required
                             />
                         </div>
@@ -185,14 +186,14 @@ const Templates3 = () => {
                                 name="description"
                                 value={newTemplate.description}
                                 onChange={handleInputChange}
-                                placeholder='Enter description'
+                                placeholder='Enter Description'
                                 rows="3"
                                 className="description-textarea"
                                 required
                             />
                         </div>
                         <div className="cost-container">
-                            <div className="cost-row">
+                            <div className="cost-row" style={{ display: 'flex', gap: '2rem' }}>
                                 <div className="form-group">
                                     <label>Material Cost (%):</label>
                                     <input
@@ -200,20 +201,20 @@ const Templates3 = () => {
                                         name="materialCost"
                                         value={newTemplate.materialCost}
                                         onChange={handleInputChange}
-                                        placeholder='Enter material cost percent'
+                                        placeholder='Enter Percentage of Material Cost'
                                         min="0"
                                         max="100"
                                         required
                                     />
                                 </div>
                                 <div className="form-group">
-                                    <label>Labor Cost (%):</label>
+                                    <label>Labour Cost (%):</label>
                                     <input
                                         type="number"
                                         name="laborCost"
                                         value={newTemplate.laborCost}
                                         onChange={handleInputChange}
-                                        placeholder='Enter labor cost percent'
+                                        placeholder='Enter Percentage of Labour Cost'
                                         min="0"
                                         max="100"
                                         required
@@ -232,7 +233,7 @@ const Templates3 = () => {
                             </div>
                         </div>
                         <div className="form-actions">
-                            <button type="submit" className="upload-btn">Upload Template</button>
+                            <button type="submit" className="upload-btn">Upload Design</button>
                             <button
                                 type="button"
                                 className="cancel-btn"
