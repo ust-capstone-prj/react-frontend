@@ -1,16 +1,16 @@
-import { useEffect, useState } from 'react';
-import './Templates1.css';
+import { useEffect, useState } from "react";
+import "./Templates1.css";
 
 const Templates1 = () => {
     const [templates, setTemplates] = useState([]);
     const [newTemplate, setNewTemplate] = useState({
-        image: '',
-        variationName: '',
-        baseCost: '',
-        description: '',
-        materialCostPercent: '',
-        laborCostPercent: '',
-        profitPercent: ''
+        image: "",
+        variationName: "",
+        baseCost: "",
+        description: "",
+        materialCostPercent: "",
+        laborCostPercent: "",
+        profitPercent: "",
     });
     const [isFormVisible, setIsFormVisible] = useState(false);
 
@@ -18,21 +18,31 @@ const Templates1 = () => {
         fetch("http://localhost:8060/api/projectvar/newcosts/3")
             .then((response) => response.json())
             .then((data) => {
-                console.log(data)
-                setTemplates(data)
+                console.log("Response from useeffect", data);
+                setTemplates(data);
             })
-            .catch((error) => console.error("Error fetching variations: ", error));
-    }, [])
+            .catch((error) =>
+                console.error("Error fetching variations: ", error)
+            );
+    }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setNewTemplate(prev => {
+        setNewTemplate((prev) => {
             const updatedTemplate = { ...prev, [name]: value };
 
             // If material or labor cost is updated, calculate profit automatically
-            if (name === 'materialCostPercent' || name === 'laborCostPercent') {
-                const materialCost = Number(name === 'materialCostPercent' ? value : updatedTemplate.materialCostPercent || 0);
-                const laborCost = Number(name === 'laborCostPercent' ? value : updatedTemplate.laborCostPercent || 0);
+            if (name === "materialCostPercent" || name === "laborCostPercent") {
+                const materialCost = Number(
+                    name === "materialCostPercent"
+                        ? value
+                        : updatedTemplate.materialCostPercent || 0
+                );
+                const laborCost = Number(
+                    name === "laborCostPercent"
+                        ? value
+                        : updatedTemplate.laborCostPercent || 0
+                );
                 const profit = Math.max(0, 100 - materialCost - laborCost);
                 updatedTemplate.profitPercent = profit.toString();
             }
@@ -52,65 +62,78 @@ const Templates1 = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const typecatid = 3 //painting id
-        console.log("value is: ", typecatid)
+        const typecatid = 3; //painting id
+        console.log("value is: ", typecatid);
         const requestBody1 = {
             projTypCatVarName: newTemplate.variationName,
             projTypCatVarCost: newTemplate.baseCost,
             projTypCatVarImg: newTemplate.image,
             projTypCatVarDesc: newTemplate.description,
-            projTypCatId: typecatid
-        }
+            projTypCatId: typecatid,
+        };
         // console.log(requestBody1)
-        console.log("Final response body", JSON.stringify(requestBody1))
+        console.log("Final response body", JSON.stringify(requestBody1));
         fetch("http://localhost:8060/api/projectvar", {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(requestBody1)
+            body: JSON.stringify(requestBody1),
         })
             .then((response) => {
                 if (!response.ok) {
-                    alert("Failed to save template")
-                    throw new Error("Failed to save template")
+                    alert("Failed to save template");
+                    throw new Error("Failed to save template");
                 }
-                return response.json()
+                return response.json();
             })
-            // then(({ ProjTypCatVarCatId }) 
+            // then(({ ProjTypCatVarCatId })
             .then(({ projTypCatVarId }) => {
-                const MaterialCost = (newTemplate.baseCost * newTemplate.materialCostPercent) / 100;
-                const LabourCost = (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
-                const ProfitCost = newTemplate.baseCost - (MaterialCost + LabourCost);
-                alert("Template added")
+                const MaterialCost =
+                    (newTemplate.baseCost * newTemplate.materialCostPercent) /
+                    100;
+                const LabourCost =
+                    (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
+                const ProfitCost =
+                    newTemplate.baseCost - (MaterialCost + LabourCost);
+                alert("Template added");
                 const requestBody2 = {
                     profitCost: ProfitCost,
                     labourCost: LabourCost,
                     materialCost: MaterialCost,
-                    projTypCatVarId
-                }
-                console.log("requestBody2: ", requestBody2)
+                    projTypCatVarId,
+                };
+                console.log("requestBody2: ", requestBody2);
                 fetch("http://localhost:8060/api/projectcost", {
                     method: "POST",
                     headers: {
-                        'Content-Type': 'application/json'
+                        "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(requestBody2)
+                    body: JSON.stringify(requestBody2),
                 })
                     .then((response) => {
                         if (!response.ok) {
-                            alert("Failed to save template")
-                            throw new Error("Failed to save template")
+                            alert("Failed to save template");
+                            throw new Error("Failed to save template");
                         }
-                        return response.json()
+                        return response.json();
                     })
                     .then((data) => {
-                        alert("Added cost successfully")
-                    })
-            })
+                        console.log("final response: ", data);
+                        alert("Added cost successfully");
+                    });
+            });
 
-        setTemplates(prev => [...prev, { ...newTemplate, id: Date.now() }]);
-        setNewTemplate({ image: '', variationName: '', baseCost: '', description: '', materialCostPercent: '', laborCostPercent: '', profitPercent: '' });
+        setTemplates((prev) => [...prev, { ...newTemplate, id: Date.now() }]);
+        setNewTemplate({
+            image: "",
+            variationName: "",
+            baseCost: "",
+            description: "",
+            materialCostPercent: "",
+            laborCostPercent: "",
+            profitPercent: "",
+        });
         setIsFormVisible(false);
     };
 
@@ -129,8 +152,6 @@ const Templates1 = () => {
                 <div className="template-form-overlay">
                     <form className="template-form" onSubmit={handleSubmit}>
                         <h3>Create New Template</h3>
-
-
 
                         <div className="form-group">
                             <label>Design Name</label>
@@ -177,11 +198,14 @@ const Templates1 = () => {
                                 placeholder="Enter Description"
                                 required
                                 rows="3"
-                                style={{ width: '100%', resize: 'none' }}
+                                style={{ width: "100%", resize: "none" }}
                             />
                         </div>
 
-                        <div className="cost-percentages-container" style={{ display: 'flex', gap: '2rem' }}>
+                        <div
+                            className="cost-percentages-container"
+                            style={{ display: "flex", gap: "2rem" }}
+                        >
                             <div className="form-group" style={{ flex: 1 }}>
                                 <label>Material Cost (%)</label>
                                 <input
@@ -222,7 +246,7 @@ const Templates1 = () => {
                                 max="100"
                                 required
                                 disabled
-                                style={{ backgroundColor: '#f0f0f0' }}
+                                style={{ backgroundColor: "#f0f0f0" }}
                             />
                         </div>
 
@@ -241,18 +265,33 @@ const Templates1 = () => {
             )}
 
             <div className="templates-list">
-                {templates.map(template => (
-                    <div key={template.projTypCatVarId} className="template-card">
+                {templates.map((template) => (
+                    <div
+                        key={template.projTypCatVarId}
+                        className="template-card"
+                    >
                         <div className="template-image">
-                            <img src={template.projTypCatVarImg} alt={template.projTypCatVarName} />
+                            <img
+                                src={template.projTypCatVarImg}
+                                alt={template.projTypCatVarName}
+                            />
                         </div>
                         <div className="template-details">
                             <h3>{template.projTypCatVarName}</h3>
                             <p>Description: {template.projTypCatVarDesc}</p>
                             <p>Cost/SqFt: ₹{template.projTypCatVarCost}</p>
-                            <p>Material Cost/SqFt: {template.projectCostPojo.materialCost}</p>
-                            <p>Labour Cost/SqFt: {template.projectCostPojo.labourCost}</p>
-                            <p>Profit/SqFt: {template.projectCostPojo.profitCost}</p>
+                            <p>
+                                Material Cost/SqFt:{" "}
+                                {template.projectCostPojo.materialCost}
+                            </p>
+                            <p>
+                                Labour Cost/SqFt:{" "}
+                                {template.projectCostPojo.labourCost}
+                            </p>
+                            <p>
+                                Profit/SqFt:{" "}
+                                {template.projectCostPojo.profitCost}
+                            </p>
                         </div>
                     </div>
                 ))}
@@ -261,4 +300,4 @@ const Templates1 = () => {
     );
 };
 
-export default Templates1; 
+export default Templates1;

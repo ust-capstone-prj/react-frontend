@@ -1,49 +1,55 @@
-import { useEffect, useState } from 'react';
-import './Templates3.css';
-const Templates3 = () => {
+import { useState } from "react";
+import "./Templates1.css";
+import { useEffect } from "react";
+``;
 
+const Templates3 = () => {
     const [templates, setTemplates] = useState([]);
-    const [isFormOpen, setIsFormOpen] = useState(false);
-    const [isEditing, setIsEditing] = useState(false);
-    const [editingId, setEditingId] = useState(null);
     const [newTemplate, setNewTemplate] = useState({
-        image: '',
-        variationName: '',
-        baseCost: '',
-        description: '',
-        materialCost: '',
-        laborCost: '',
-        profitCost: ''
+        image: "",
+        variationName: "",
+        baseCost: "",
+        description: "",
+        materialCostPercent: "",
+        laborCostPercent: "",
+        profitPercent: "",
     });
+    const [isFormVisible, setIsFormVisible] = useState(false);
 
     useEffect(() => {
         fetch("http://localhost:8060/api/projectvar/newcosts/1")
             .then((response) => response.json())
             .then((data) => {
-                console.log(data)
-                setTemplates(data)
+                console.log(data);
+                setTemplates(data);
             })
-            .catch((error) => console.error("Error fetching variations: ", error));
-    }, [])
+
+            .catch((error) =>
+                console.error("Error fetching variations:", error)
+            );
+    }, []);
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
-        setNewTemplate(prev => {
-            const updatedTemplate = {
-                ...prev,
-                [name]: value
-            };
+        setNewTemplate((prev) => {
+            const updatedTemplate = { ...prev, [name]: value };
 
-            // Automatically calculate profit percentage
-            if (name === 'materialCost' || name === 'laborCost') {
-                const materialCost = Number(updatedTemplate.materialCost || 0);
-                const laborCost = Number(updatedTemplate.laborCost || 0);
-                const profitCost = 100 - (materialCost + laborCost);
-
-                if (profitCost >= 0) {
-                    updatedTemplate.profitCost = profitCost.toString();
+            if (name === "materialCostPercent" || name === "laborCostPercent") {
+                const matCost = Number(
+                    name === "materialCostPercent"
+                        ? value
+                        : updatedTemplate.materialCostPercent || 0
+                );
+                const labCost = Number(
+                    name === "laborCostPercent"
+                        ? value
+                        : updatedTemplate.laborCostPercent || 0
+                );
+                const profit = 100 - (matCost + labCost);
+                if (profit >= 0) {
+                    updatedTemplate.profitPercent = profit;
                 } else {
-                    return prev; // Don't update if total exceeds 100%
+                    return prev;
                 }
             }
 
@@ -51,101 +57,110 @@ const Templates3 = () => {
         });
     };
 
-    const handleDelete = (id) => {
-        const element = document.getElementById(`template-${id}`);
-        element.classList.add('fade-out');
-
-        setTimeout(() => {
-            setTemplates(prev => prev.filter(template => template.id !== id));
-        }, 300);
-    };
-
-    const handleEdit = (template) => {
-        setNewTemplate(template);
-        setIsEditing(true);
-        setEditingId(template.id);
-        setIsFormOpen(true);
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setNewTemplate((prev) => ({
+                ...prev,
+                image: reader.result,
+            }));
+        };
+        if (file) {
+            reader.readAsDataURL(file);
+        }
     };
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        const typecatid = 1 //lighting id
-        console.log("value is: ", typecatid)
+        const typecatid = 1; //ceiling id
+        console.log("value is: ", typecatid);
         const requestBody1 = {
             projTypCatVarName: newTemplate.variationName,
             projTypCatVarCost: newTemplate.baseCost,
             projTypCatVarImg: newTemplate.image,
             projTypCatVarDesc: newTemplate.description,
-            projTypCatId: typecatid
-        }
+            projTypCatId: typecatid,
+        };
         // console.log(requestBody1)
-        console.log("Final response body", JSON.stringify(requestBody1))
+        console.log("Final response body", JSON.stringify(requestBody1));
         fetch("http://localhost:8060/api/projectvar", {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(requestBody1)
+            body: JSON.stringify(requestBody1),
         })
             .then((response) => {
                 if (!response.ok) {
-                    alert("Failed to save template")
-                    throw new Error("Failed to save template")
+                    alert("Failed to save template");
+                    throw new Error("Failed to save template");
                 }
-                return response.json()
+                return response.json();
             })
-            // then(({ ProjTypCatVarCatId }) 
+            // then(({ ProjTypCatVarCatId })
             .then(({ projTypCatVarId }) => {
-                const MaterialCost = (newTemplate.baseCost * newTemplate.materialCostPercent) / 100;
-                const LabourCost = (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
-                const ProfitCost = newTemplate.baseCost - (MaterialCost + LabourCost);
-                alert("Template added")
+                const MaterialCost =
+                    (newTemplate.baseCost * newTemplate.materialCostPercent) /
+                    100;
+                const LabourCost =
+                    (newTemplate.baseCost * newTemplate.laborCostPercent) / 100;
+                const ProfitCost =
+                    newTemplate.baseCost - (MaterialCost + LabourCost);
+                alert("Template added");
                 const requestBody2 = {
                     profitCost: ProfitCost,
                     labourCost: LabourCost,
                     materialCost: MaterialCost,
-                    projTypCatVarId
-                }
-                console.log("requestBody2: ", requestBody2)
+                    projTypCatVarId,
+                };
+                console.log("requestBody2: ", requestBody2);
                 fetch("http://localhost:8060/api/projectcost", {
                     method: "POST",
                     headers: {
-                        'Content-Type': 'application/json'
+                        "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(requestBody2)
+                    body: JSON.stringify(requestBody2),
                 })
                     .then((response) => {
                         if (!response.ok) {
-                            alert("Failed to save template")
-                            throw new Error("Failed to save template")
+                            alert("Failed to save template");
+                            throw new Error("Failed to save template");
                         }
-                        return response.json()
+                        return response.json();
                     })
                     .then((data) => {
-                        alert("Added cost successfully")
-                    })
-            })
+                        alert("Added cost successfully");
+                    });
+            });
 
-        setTemplates(prev => [...prev, { ...newTemplate, id: Date.now() }]);
-        setNewTemplate({ image: '', variationName: '', baseCost: '', description: '', materialCostPercent: '', laborCostPercent: '', profitPercent: '' });
+        setTemplates((prev) => [...prev, { ...newTemplate, id: Date.now() }]);
+        setNewTemplate({
+            image: "",
+            variationName: "",
+            baseCost: "",
+            description: "",
+            materialCostPercent: "",
+            laborCostPercent: "",
+            profitPercent: "",
+        });
         setIsFormVisible(false);
     };
 
     return (
         <div className="templates-container">
-            <h2 className="templates-title">Lighting Design Templates</h2>
+            <h2 className="templates-title">Ceiling Design Templates</h2>
 
             <button
                 className="create-template-btn"
-                onClick={() => setIsFormOpen(true)}
+                onClick={() => setIsFormVisible(true)}
             >
-                Create New Template
+                Add Design
             </button>
 
-            {isFormOpen && (
+            {isFormVisible && (
                 <div className="template-form-overlay">
                     <form onSubmit={handleSubmit} className="template-form">
-
                         <div className="form-group">
                             <label>Design Name:</label>
                             <input
@@ -153,8 +168,20 @@ const Templates3 = () => {
                                 name="variationName"
                                 value={newTemplate.variationName}
                                 onChange={handleInputChange}
-                                placeholder='Enter Design name'
+                                placeholder="Enter Design Name"
                                 required
+                            />
+                        </div>
+                        <div className="form-group">
+                            <label>Description:</label>
+                            <textarea
+                                name="description"
+                                value={newTemplate.description}
+                                onChange={handleInputChange}
+                                placeholder="Enter Description"
+                                required
+                                rows="3"
+                                style={{ width: "100%", resize: "none" }}
                             />
                         </div>
                         <div className="form-group">
@@ -164,7 +191,7 @@ const Templates3 = () => {
                                 name="baseCost"
                                 value={newTemplate.baseCost}
                                 onChange={handleInputChange}
-                                placeholder='Enter Cost/SqFt'
+                                placeholder="Enter base cost"
                                 required
                                 min="0"
                             />
@@ -180,64 +207,50 @@ const Templates3 = () => {
                                 required
                             />
                         </div>
-                        <div className="form-group">
-                            <label>Description:</label>
-                            <textarea
-                                name="description"
-                                value={newTemplate.description}
-                                onChange={handleInputChange}
-                                placeholder='Enter Description'
-                                rows="3"
-                                className="description-textarea"
-                                required
-                            />
-                        </div>
-                        <div className="cost-container">
-                            <div className="cost-row" style={{ display: 'flex', gap: '2rem' }}>
-                                <div className="form-group">
-                                    <label>Material Cost (%):</label>
-                                    <input
-                                        type="number"
-                                        name="materialCost"
-                                        value={newTemplate.materialCost}
-                                        onChange={handleInputChange}
-                                        placeholder='Enter Percentage of Material Cost'
-                                        min="0"
-                                        max="100"
-                                        required
-                                    />
-                                </div>
-                                <div className="form-group">
-                                    <label>Labour Cost (%):</label>
-                                    <input
-                                        type="number"
-                                        name="laborCost"
-                                        value={newTemplate.laborCost}
-                                        onChange={handleInputChange}
-                                        placeholder='Enter Percentage of Labour Cost'
-                                        min="0"
-                                        max="100"
-                                        required
-                                    />
-                                </div>
-                            </div>
-                            <div className="form-group profit-group">
-                                <label>Profit (%):</label>
+                        <div
+                            className="form-row"
+                            style={{ display: "flex", gap: "2rem" }}
+                        >
+                            <div className="form-group" style={{ flex: 1 }}>
+                                <label>Material Cost Percent:</label>
                                 <input
                                     type="number"
-                                    name="profitCost"
-                                    value={newTemplate.profitCost}
-                                    readOnly
-                                    disabled
+                                    name="materialCostPercent"
+                                    value={newTemplate.materialCostPercent}
+                                    placeholder="Enter Percentage of Material Cost"
+                                    onChange={handleInputChange}
+                                    required
+                                />
+                            </div>
+                            <div className="form-group" style={{ flex: 1 }}>
+                                <label>Labor Cost Percent:</label>
+                                <input
+                                    type="number"
+                                    name="laborCostPercent"
+                                    value={newTemplate.laborCostPercent}
+                                    onChange={handleInputChange}
+                                    placeholder="Enter Percentage of Labour Cost"
+                                    required
                                 />
                             </div>
                         </div>
-                        <div className="form-actions">
-                            <button type="submit" className="upload-btn">Upload Design</button>
+                        <div className="form-group">
+                            <label>Profit Percent:</label>
+                            <input
+                                type="number"
+                                name="profitPercent"
+                                value={newTemplate.profitPercent}
+                                onChange={handleInputChange}
+                                required
+                                disabled
+                            />
+                        </div>
+                        <div className="form-buttons">
+                            <button type="submit">Upload Design</button>
                             <button
                                 type="button"
+                                onClick={() => setIsFormVisible(false)}
                                 className="cancel-btn"
-                                onClick={() => setIsFormOpen(false)}
                             >
                                 Cancel
                             </button>
@@ -247,18 +260,33 @@ const Templates3 = () => {
             )}
 
             <div className="templates-list">
-                {templates.map(template => (
-                    <div key={template.projTypCatVarId} className="template-card">
+                {templates.map((template) => (
+                    <div
+                        key={template.projTypCatVarId}
+                        className="template-card"
+                    >
                         <div className="template-image">
-                            <img src={template.projTypCatVarImg} alt={template.projTypCatVarName} />
+                            <img
+                                src={template.projTypCatVarImg}
+                                alt={template.projTypCatVarName}
+                            />
                         </div>
                         <div className="template-details">
                             <h3>{template.projTypCatVarName}</h3>
                             <p>Description: {template.projTypCatVarDesc}</p>
                             <p>Cost/SqFt: ₹{template.projTypCatVarCost}</p>
-                            <p>Material Cost/SqFt: {template.projectCostPojo.materialCost}</p>
-                            <p>Labour Cost/SqFt: {template.projectCostPojo.labourCost}</p>
-                            <p>Profit/SqFt: {template.projectCostPojo.profitCost}</p>
+                            <p>
+                                Material Cost/SqFt:{" "}
+                                {template.projectCostPojo.materialCost}
+                            </p>
+                            <p>
+                                Labour Cost/SqFt:{" "}
+                                {template.projectCostPojo.labourCost}
+                            </p>
+                            <p>
+                                Profit/SqFt:{" "}
+                                {template.projectCostPojo.profitCost}
+                            </p>
                         </div>
                     </div>
                 ))}
@@ -267,4 +295,4 @@ const Templates3 = () => {
     );
 };
 
-export default Templates3; 
+export default Templates3;
