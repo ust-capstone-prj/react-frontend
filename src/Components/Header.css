@@ -1,3 +1,4 @@
+/* General header styles */
 .header {
   position: fixed;
   top: 0;
@@ -20,10 +21,14 @@
 
 .profile-container {
   position: relative;
+  display: flex;
+  align-items: center; /* Ensures profile icon is vertically centered */
+  gap: 20px; /* Adds space between the button and the profile icon */
 }
 
 .profile-icon {
   cursor: pointer;
+  transform: translateY(5px); /* Move the icon 5px lower */
 }
 
 .dropdown-menu {
@@ -34,7 +39,7 @@
   border: 1px solid #ddd;
   border-radius: 4px;
   padding: 10px;
-  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .username {
@@ -68,4 +73,52 @@
 .logo-image {
   height: 40px; /* Adjust this value to match your desired logo size */
   width: auto;
-} 
+}
+
+/* New styles for the "My Projects" button */
+.projects-btn {
+  background-color: #4b9dd5; /* A blue shade */
+  color: white;
+  border: none;
+  padding: 12px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+}
+
+.projects-btn:hover {
+  background-color: #3a88a7; /* Slightly darker blue on hover */
+  transform: scale(1.05); /* Slight scale effect on hover */
+}
+
+.projects-btn:focus {
+  outline: none;
+}
+
+/* Ensure the button is aligned left of the profile container */
+.header .header-content {
+  display: flex;
+  align-items: center;
+}
+
+/* Responsive handling for smaller screens */
+@media (max-width: 768px) {
+  .header {
+    padding: 0 10px;
+  }
+
+  .logo {
+    font-size: 40px;
+  }
+
+  .projects-btn {
+    font-size: 16px;
+    padding: 10px 18px;
+  }
+
+  .profile-icon {
+    font-size: 35px;
+  }
+}
