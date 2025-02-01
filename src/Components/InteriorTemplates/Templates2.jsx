@@ -272,21 +272,21 @@ const Templates2 = () => {
                             />
                         </div>
                         <div className="template-details">
-                            <h3>{template.projTypCatVarName}</h3>
-                            <p>Description: {template.projTypCatVarDesc}</p>
-                            <p>Cost/SqFt: ₹{template.projTypCatVarCost}</p>
-                            <p>
+                            <h2>{template.projTypCatVarName}</h2>
+                            <p>{template.projTypCatVarDesc}</p>
+                            <h4>Cost/SqFt: ₹{template.projTypCatVarCost}</h4>
+                            <h4>
                                 Material Cost/SqFt:{" "}
                                 {template.projectCostPojo.materialCost}
-                            </p>
-                            <p>
+                            </h4>
+                            <h4>
                                 Labour Cost/SqFt:{" "}
                                 {template.projectCostPojo.labourCost}
-                            </p>
-                            <p>
+                            </h4>
+                            <h4>
                                 Profit/SqFt:{" "}
                                 {template.projectCostPojo.profitCost}
-                            </p>
+                            </h4>
                         </div>
                     </div>
                 ))}
