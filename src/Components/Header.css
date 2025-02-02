@@ -5,7 +5,7 @@
   left: 0;
   right: 0;
   height: 80px;
-  background-color: #56afd8;
+  background-color: #04141b;
   box-shadow: 0 2px 4px rgba(223, 16, 16, 0.1);
   display: flex;
   justify-content: space-between;
@@ -29,6 +29,7 @@
 .profile-icon {
   cursor: pointer;
   transform: translateY(5px); /* Move the icon 5px lower */
+  color: white;
 }
 
 .dropdown-menu {
@@ -77,7 +78,7 @@
 
 /* New styles for the "My Projects" button */
 .projects-btn {
-  background-color: #4b9dd5; /* A blue shade */
+  background-color: gray; /* A blue shade */
   color: white;
   border: none;
   padding: 12px 20px;
@@ -89,7 +90,7 @@
 }
 
 .projects-btn:hover {
-  background-color: #3a88a7; /* Slightly darker blue on hover */
+  background-color: #030d12; /* Slightly darker blue on hover */
   transform: scale(1.05); /* Slight scale effect on hover */
 }
 

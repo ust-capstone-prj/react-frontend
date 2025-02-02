@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import './temp1.css';
+import ContractorLayout from '../ContractorLayout';
 
 const ConstructionTemplate1 = () => {
     const location = useLocation();
@@ -93,6 +94,8 @@ const ConstructionTemplate1 = () => {
     };
 
     return (
+        <ContractorLayout>
+
         <div className="template-container">
             <div className="background-effect"></div>
             <div className="template-content">
@@ -264,6 +267,8 @@ const ConstructionTemplate1 = () => {
                 ))}
             </div>
         </div>
+        </ContractorLayout>
+
     );
 };
 

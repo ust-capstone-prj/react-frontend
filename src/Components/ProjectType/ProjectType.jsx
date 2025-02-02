@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './ProjectType.css';
+import ContractorLayout from '../ContractorLayout';
 
 const ProjectType = () => {
     const navigate = useNavigate();
@@ -20,6 +21,7 @@ const ProjectType = () => {
     };
 
     return (
+        <ContractorLayout>
         <div className="project-type-container">
             <div className="background-effect"></div>
             <h2 className="project-type-title">Select Project Type</h2>
@@ -58,6 +60,7 @@ const ProjectType = () => {
                 </div>
             </div>
         </div>
+        </ContractorLayout>
     );
 };
 

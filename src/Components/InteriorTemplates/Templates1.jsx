@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import "./Templates1.css";
+import ContractorLayout from "../ContractorLayout";
 
 const Templates1 = () => {
     const [templates, setTemplates] = useState([]);
@@ -138,6 +139,7 @@ const Templates1 = () => {
     };
 
     return (
+        <ContractorLayout>
         <div className="templates-container">
             <h2 className="templates-title">Paint Work Templates</h2>
 
@@ -297,6 +299,8 @@ const Templates1 = () => {
                 ))}
             </div>
         </div>
+        </ContractorLayout>
+
     );
 };
 
