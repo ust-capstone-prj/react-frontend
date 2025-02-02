@@ -71,8 +71,35 @@ const Paints = () => {
         setShowPhoneModal(true);
     };
 
-    const handlePhoneSubmit = () => {
+    const handlePhoneSubmit = async() => {
         if (phoneNumber.length >= 10) {
+            const userId = sessionStorage.getItem("userId"); // Fetch userId from sessionStorage
+
+        if (!userId) {
+            console.error("User ID not found in session storage!");
+            return;
+        }
+           
+            try {
+
+                // Prepare project data
+                const projectData = {
+                    sqftArea: parseFloat(sqFeet),
+                    projectTypeCategoryVariationId: selectedTemplate.id,
+                    userId: userId,  // Set userId from fetched data
+                    contractorId: null // Can be set if needed
+                };
+
+                console.log(projectData);
+                const response = await fetch("http://localhost:8060/project-details", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify(projectData),
+                });
+                console.log(response);
+                if (response.ok) {
             setShowPhoneModal(false);
             setShowSuccessModal(true);
             setTimeout(() => {
@@ -82,7 +109,14 @@ const Paints = () => {
                 setSqFeet("");
                 navigate("/project-type-client");
             }, 3000);
+        }else{
+            console.log("Failed to save project details");
         }
+        }
+        catch(error){
+            console.log("Error processing request:",error);
+        }
+    }
     };
 
     return (
@@ -221,8 +255,8 @@ const Paints = () => {
                 <div className="success-modal-overlay">
                     <div className="success-modal">
                         <div className="success-icon">✓</div>
-                        <h2>Order Successful!</h2>
-                        <p>Thank you for your purchase</p>
+                        <h2>Design Added!</h2>
+                        <p>Thank you</p>
                     </div>
                 </div>
             )}

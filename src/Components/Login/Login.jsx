@@ -47,12 +47,14 @@ const Login = () => {
             })
             .then((data) => {
                 console.log("Response Data:", data);
-                const { username, roleName, token } = data;
+                const { username, roleName, token,userId } = data;
                 
                 // Store the auth token and role
+                
                 sessionStorage.setItem("authToken", token);
                 sessionStorage.setItem("userRole", roleName);
                 sessionStorage.setItem("username", username);
+                sessionStorage.setItem("userId",userId);
 
                 // Navigate based on role
                 if (roleName === "CONTRACTOR") {
