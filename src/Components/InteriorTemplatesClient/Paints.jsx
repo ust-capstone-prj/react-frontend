@@ -71,52 +71,54 @@ const Paints = () => {
         setShowPhoneModal(true);
     };
 
-    const handlePhoneSubmit = async() => {
+    const handlePhoneSubmit = async () => {
         if (phoneNumber.length >= 10) {
-            const userId = sessionStorage.getItem("userId"); // Fetch userId from sessionStorage
+            const userId = sessionStorage.getItem("userid"); // Fetch userId from sessionStorage
 
-        if (!userId) {
-            console.error("User ID not found in session storage!");
-            return;
-        }
-           
+            if (!userId) {
+                console.error("User ID not found in session storage!");
+                return;
+            }
+
             try {
-
                 // Prepare project data
                 const projectData = {
                     sqftArea: parseFloat(sqFeet),
                     projectTypeCategoryVariationId: selectedTemplate.id,
-                    userId: userId,  // Set userId from fetched data
-                    contractorId: null // Can be set if needed
+                    contractorId: null, // Can be set if needed
+                    userId: userId, // Set userId from fetched data
+                    isApproved: false,
                 };
 
                 console.log(projectData);
-                const response = await fetch("http://localhost:8060/project-details", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(projectData),
-                });
+                const response = await fetch(
+                    "http://localhost:8060/project-details",
+                    {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify(projectData),
+                    }
+                );
                 console.log(response);
                 if (response.ok) {
-            setShowPhoneModal(false);
-            setShowSuccessModal(true);
-            setTimeout(() => {
-                setShowSuccessModal(false);
-                setShowFinalPrice(false);
-                setSelectedTemplate(null);
-                setSqFeet("");
-                navigate("/project-type-client");
-            }, 3000);
-        }else{
-            console.log("Failed to save project details");
+                    setShowPhoneModal(false);
+                    setShowSuccessModal(true);
+                    setTimeout(() => {
+                        setShowSuccessModal(false);
+                        setShowFinalPrice(false);
+                        setSelectedTemplate(null);
+                        setSqFeet("");
+                        navigate("/project-type-client");
+                    }, 3000);
+                } else {
+                    console.log("Failed to save project details");
+                }
+            } catch (error) {
+                console.log("Error processing request:", error);
+            }
         }
-        }
-        catch(error){
-            console.log("Error processing request:",error);
-        }
-    }
     };
 
     return (
