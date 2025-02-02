@@ -1,6 +1,8 @@
 import { useState } from "react";
 import "./Templates1.css";
 import { useEffect } from "react";
+import ContractorLayout from "../ContractorLayout";
+
 ``;
 
 const Templates2 = () => {
@@ -148,6 +150,8 @@ const Templates2 = () => {
     };
 
     return (
+        <ContractorLayout>
+
         <div className="templates-container">
             <h2 className="templates-title">Ceiling Design Templates</h2>
 
@@ -292,6 +296,8 @@ const Templates2 = () => {
                 ))}
             </div>
         </div>
+                </ContractorLayout>
+
     );
 };
 

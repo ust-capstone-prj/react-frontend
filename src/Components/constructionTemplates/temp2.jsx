@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import './temp2.css';
+import ContractorLayout from '../ContractorLayout';
 
 const Temp2 = () => {
     const [showForm, setShowForm] = useState(false);
@@ -101,6 +102,8 @@ const Temp2 = () => {
     };
 
     return (
+        <ContractorLayout>
+
         <div className="temp2-container">
             <h2 className="templates-title">Renovation Design Templates</h2>
             
@@ -241,6 +244,8 @@ const Temp2 = () => {
                 ))}
             </div>
         </div>
+        </ContractorLayout>
+
     );
 };
 
