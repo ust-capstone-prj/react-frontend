@@ -62,14 +62,6 @@ const Login = () => {
                         console.error("Error:", error); // handle any errors
                     });
 
-                // Store the auth token and role
-
-                // sessionStorage.setItem("authToken", token);
-                // sessionStorage.setItem("userRole", roleName);
-                // sessionStorage.setItem("username", username);
-                // sessionStorage.setItem("userid", userId);
-                //sessionStorage.setItem("userId",userId);
-
                 // Navigate based on role
                 if (roleName === "CONTRACTOR") {
                     console.log("Logged in as Contractor");

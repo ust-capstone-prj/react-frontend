@@ -1,454 +1,79 @@
-/* .paints-container {
-    padding: 2rem;
-    max-width: 1200px;
-    margin: 0 auto;
-}
-
-.paints-title {
-    text-align: center;
-    color: #333;
-    margin-bottom: 2rem;
-    font-size: 2.5rem;
-}
-
-.templates-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 2rem;
-    animation: fadeIn 0.5s ease-in;
-    justify-items: center;
-}
-
-.template-card {
-    background: white;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-    overflow: hidden;
-    transition: transform 0.3s ease;
-    width: 100%;
-    max-width: 450px;
-}
-
-.template-card:hover {
-    transform: translateY(-5px);
-}
-
-.template-image {
-    height: 250px;
-    overflow: hidden;
-}
-
-.template-image img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
-}
-
-.template-content {
-    padding: 1.5rem;
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-}
-
-.price {
-    color: #2c5282;
-    font-size: 1.25rem;
-    font-weight: bold;
-    margin: 0.5rem 0;
-}
-
-.description {
-    color: #666;
-    margin-bottom: 1rem;
-}
-
-.features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.feature-tag {
-    background: #e2e8f0;
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.875rem;
-    color: #4a5568;
-}
-
-.select-btn {
-    width: auto;
-    padding: 0.75rem 1.5rem;
-    background: #4299e1;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-    transition: background 0.3s ease;
-    align-self: flex-start;
-}
-
-.select-btn:hover {
-    background: #3182ce;
-}
-
-.modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: rgba(0,0,0,0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    animation: fadeIn 0.3s ease;
-}
-
-.modal {
-    background: white;
-    padding: 2rem;
-    border-radius: 12px;
-    width: 90%;
-    max-width: 400px;
-    text-align: center;
-}
-
-.modal input {
-    width: 100%;
-    padding: 0.75rem;
-    margin: 1rem 0;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-}
-
-.modal button {
-    margin: 0.5rem;
-    padding: 0.75rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    cursor: pointer;
-}
-
-.final-price {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    background: white;
-    padding: 1rem 2rem;
-    box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
-    text-align: center;
-    animation: slideUp 0.3s ease;
-}
-
-.amount {
-    font-size: 2rem;
-    color: #2c5282;
-    font-weight: bold;
-}
-
-.details {
-    color: #666;
-}
-
-.action-buttons {
-    display: flex;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.add-to-cart-btn, .proceed-btn {
-    padding: 0.8rem 1.5rem;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: transform 0.2s;
-}
-
-.add-to-cart-btn {
-    background-color: #fff;
-    color: #333;
-    border: 2px solid #333;
-}
-
-.proceed-btn {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.add-to-cart-btn:hover, .proceed-btn:hover {
-    transform: scale(1.05);
-}
-
-.success-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-out;
-}
-
-.success-modal {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 10px;
-    text-align: center;
-    animation: slideIn 0.5s ease-out;
-}
-
-.success-icon {
-    width: 80px;
-    height: 80px;
-    background-color: #4CAF50;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 0 auto 1rem;
-    color: white;
-    font-size: 40px;
-    animation: pulse 2s infinite;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
-    }
-    70% {
-        transform: scale(1.1);
-        box-shadow: 0 0 0 15px rgba(76, 175, 80, 0);
-    }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
-    }
-}
-
-.phone-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-out;
-}
-
-.phone-modal {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 15px;
-    text-align: center;
-    animation: bounceIn 0.5s ease-out;
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-.phone-modal h2 {
-    color: #2c5282;
-    margin-bottom: 1rem;
-}
-
-.phone-input-container {
-    position: relative;
-    margin: 2rem 0;
-}
-
-.phone-modal input {
-    width: 100%;
-    padding: 1rem;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    transition: border-color 0.3s ease;
-}
-
-.phone-modal input:focus {
-    outline: none;
-    border-color: #4299e1;
-}
-
-.input-animation-bar {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: #4299e1;
-    transition: width 0.3s ease, left 0.3s ease;
-}
-
-.phone-modal input:focus ~ .input-animation-bar {
-    width: 100%;
-    left: 0;
-}
-
-.error-message {
-    color: #e53e3e;
-    font-size: 0.9rem;
-    margin-top: 0.5rem;
-    animation: shake 0.5s ease-in-out;
-}
-
-.confirm-btn {
-    padding: 0.8rem 2rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    background-color: #e2e8f0;
-    color: #718096;
-}
-
-.confirm-btn.active {
-    background-color: #4CAF50;
-    color: white;
-    transform: scale(1.02);
-}
-
-.confirm-btn.active:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
-}
-
-@keyframes bounceIn {
-    0% {
-        transform: scale(0.3);
-        opacity: 0;
-    }
-    50% {
-        transform: scale(1.05);
-    }
-    70% { transform: scale(0.9); }
-    100% { transform: scale(1); }
-}
-
-@keyframes shake {
-    0%, 100% { transform: translateX(0); }
-    10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
-    20%, 40%, 60%, 80% { transform: translateX(5px); }
-}  */
-
 .paints-container {
     padding: 2rem;
     max-width: 1200px;
     margin: 0 auto;
-}
-
-.paints-title {
+    margin-top: 100px; /* Add margin to account for the fixed header */
+    box-sizing: border-box; /* Ensure padding and margin are correctly accounted for */
+  }
+  
+  .paints-title {
     text-align: center;
     color: #333;
     margin-bottom: 2rem;
     font-size: 2.5rem;
-}
-
-.templates-grid {
+  }
+  
+  .templates-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 2rem;
-    animation: fadeIn 0.5s ease-in;
+    grid-template-columns: repeat(4, 1fr); /* 4 cards per row */
+    gap: 2rem; /* Ensures spacing between cards */
     justify-items: center;
-}
-
-.template-card {
+    animation: fadeIn 0.5s ease-in;
+    margin-bottom: 4rem; /* Space between cards and footer */
+  }
+  
+  /* Ensure the card size */
+  .template-card {
     background: white;
     border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
     overflow: hidden;
     transition: transform 0.3s ease;
     width: 100%;
-    max-width: 450px;
+    max-width: 280px; /* Limit card width */
     margin: 0 auto;
-}
-
-.template-card:hover {
+    display: flex;
+    flex-direction: column;
+    padding: 1rem; /* Padding inside card */
+  }
+  
+  .template-card:hover {
     transform: translateY(-5px);
-}
-
-.template-image {
+  }
+  
+  .template-image {
     height: 250px;
     overflow: hidden;
-}
-
-.template-image img {
+    border-radius: 8px;
+  }
+  
+  .template-image img {
     width: 100%;
     height: 100%;
     object-fit: cover;
-}
-
-.template-content {
+  }
+  
+  .template-content {
     padding: 1.5rem;
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-}
-
-.price {
+    gap: 1rem; /* Space between price, description, and button */
+  }
+  
+  .price {
     color: #2c5282;
     font-size: 1.25rem;
     font-weight: bold;
-    margin: 0.5rem 0;
-}
-
-.description {
+    margin: 0;
+  }
+  
+  .description {
     color: #666;
     margin-bottom: 1rem;
-}
-
-.features {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-.feature-tag {
-    background: #e2e8f0;
-    padding: 0.25rem 0.75rem;
-    border-radius: 15px;
-    font-size: 0.875rem;
-    color: #4a5568;
-}
-
-.select-btn {
+  }
+  
+  .select-btn {
     width: auto;
     padding: 0.75rem 1.5rem;
     background: #4299e1;
@@ -458,125 +83,118 @@
     cursor: pointer;
     transition: background 0.3s ease;
     align-self: flex-start;
-}
-
-.select-btn:hover {
+  }
+  
+  .select-btn:hover {
     background: #3182ce;
-}
-
-.modal-overlay {
+  }
+  
+  /* Modal Styling */
+  .modal-overlay, .phone-modal-overlay, .success-modal-overlay {
     position: fixed;
     top: 0;
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgba(0,0,0,0.5);
+    background: rgba(0, 0, 0, 0.5);
     display: flex;
     justify-content: center;
     align-items: center;
     animation: fadeIn 0.3s ease;
-}
-
-.modal {
+    z-index: 1000;
+  }
+  
+  .modal, .phone-modal, .success-modal {
     background: white;
     padding: 2rem;
     border-radius: 12px;
     width: 90%;
     max-width: 400px;
     text-align: center;
-}
-
-.modal input {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .modal input, .phone-modal input {
     width: 100%;
-    padding: 0.75rem;
-    margin: 1rem 0;
-    border: 1px solid #ddd;
-    border-radius: 6px;
-}
-
-.modal button {
+    padding: 1rem;
+    border: 2px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    transition: border-color 0.3s ease;
+  }
+  
+  .modal button, .phone-modal button, .confirm-btn {
     margin: 0.5rem;
     padding: 0.75rem 1.5rem;
     border: none;
     border-radius: 6px;
     cursor: pointer;
-}
-
-.final-price {
+  }
+  
+  .modal input:focus {
+    outline: none;
+    border-color: #4299e1;
+  }
+  
+  .phone-modal input:focus ~ .input-animation-bar {
+    width: 100%;
+    left: 0;
+  }
+  
+  .final-price {
     position: fixed;
     bottom: 0;
     left: 0;
     right: 0;
     background: white;
     padding: 1rem 2rem;
-    box-shadow: 0 -4px 15px rgba(0,0,0,0.1);
+    box-shadow: 0 -4px 15px rgba(0, 0, 0, 0.1);
     text-align: center;
     animation: slideUp 0.3s ease;
-}
-
-.amount {
+    z-index: 999;
+  }
+  
+  .amount {
     font-size: 2rem;
     color: #2c5282;
     font-weight: bold;
-}
-
-.details {
+  }
+  
+  .details {
     color: #666;
-}
-
-.action-buttons {
+  }
+  
+  .action-buttons {
     display: flex;
     gap: 1rem;
     margin-top: 1rem;
-}
-
-.add-to-cart-btn, .proceed-btn {
+  }
+  
+  .add-to-cart-btn, .proceed-btn {
     padding: 0.8rem 1.5rem;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     font-weight: bold;
     transition: transform 0.2s;
-}
-
-.add-to-cart-btn {
+  }
+  
+  .add-to-cart-btn {
     background-color: #fff;
     color: #333;
     border: 2px solid #333;
-}
-
-.proceed-btn {
+  }
+  
+  .proceed-btn {
     background-color: #4CAF50;
     color: white;
-}
-
-.add-to-cart-btn:hover, .proceed-btn:hover {
+  }
+  
+  .add-to-cart-btn:hover, .proceed-btn:hover {
     transform: scale(1.05);
-}
-
-.success-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-out;
-}
-
-.success-modal {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 10px;
-    text-align: center;
-    animation: slideIn 0.5s ease-out;
-}
-
-.success-icon {
+  }
+  
+  .success-icon {
     width: 80px;
     height: 80px;
     background-color: #4CAF50;
@@ -588,151 +206,67 @@
     color: white;
     font-size: 40px;
     animation: pulse 2s infinite;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
-}
-
-@keyframes slideUp {
-    from { transform: translateY(100%); }
-    to { transform: translateY(0); }
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateY(-50px);
-        opacity: 0;
-    }
-    to {
-        transform: translateY(0);
-        opacity: 1;
-    }
-}
-
-@keyframes pulse {
-    0% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
-    }
-    70% {
-        transform: scale(1.1);
-        box-shadow: 0 0 0 15px rgba(76, 175, 80, 0);
-    }
-    100% {
-        transform: scale(1);
-        box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
-    }
-}
-
-.phone-modal-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(0, 0, 0, 0.5);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    z-index: 1000;
-    animation: fadeIn 0.3s ease-out;
-}
-
-.phone-modal {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 15px;
-    text-align: center;
-    animation: bounceIn 0.5s ease-out;
-    max-width: 400px;
-    width: 90%;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-}
-
-.phone-modal h2 {
-    color: #2c5282;
-    margin-bottom: 1rem;
-}
-
-.phone-input-container {
-    position: relative;
-    margin: 2rem 0;
-}
-
-.phone-modal input {
-    width: 100%;
-    padding: 1rem;
-    border: 2px solid #e2e8f0;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    transition: border-color 0.3s ease;
-}
-
-.phone-modal input:focus {
-    outline: none;
-    border-color: #4299e1;
-}
-
-.input-animation-bar {
-    position: absolute;
-    bottom: 0;
-    left: 50%;
-    width: 0;
-    height: 2px;
-    background: #4299e1;
-    transition: width 0.3s ease, left 0.3s ease;
-}
-
-.phone-modal input:focus ~ .input-animation-bar {
-    width: 100%;
-    left: 0;
-}
-
-.error-message {
+  }
+  
+  /* Error Messages */
+  .error-message {
     color: #e53e3e;
     font-size: 0.9rem;
     margin-top: 0.5rem;
     animation: shake 0.5s ease-in-out;
-}
-
-.confirm-btn {
-    padding: 0.8rem 2rem;
-    border: none;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: all 0.3s ease;
-    background-color: #e2e8f0;
-    color: #718096;
-}
-
-.confirm-btn.active {
-    background-color: #4CAF50;
-    color: white;
-    transform: scale(1.02);
-}
-
-.confirm-btn.active:hover {
-    background-color: #45a049;
-    transform: scale(1.05);
-}
-
-@keyframes bounceIn {
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideUp {
+    from { transform: translateY(100%); }
+    to { transform: translateY(0); }
+  }
+  
+  @keyframes pulse {
     0% {
-        transform: scale(0.3);
-        opacity: 0;
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(76, 175, 80, 0.7);
     }
-    50% {
-        transform: scale(1.05);
+    70% {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 15px rgba(76, 175, 80, 0);
     }
-    70% { transform: scale(0.9); }
-    100% { transform: scale(1); }
-}
-
-@keyframes shake {
+    100% {
+      transform: scale(1);
+      box-shadow: 0 0 0 0 rgba(76, 175, 80, 0);
+    }
+  }
+  
+  @keyframes shake {
     0%, 100% { transform: translateX(0); }
     10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
     20%, 40%, 60%, 80% { transform: translateX(5px); }
-}
+  }
+  
+  /* Responsive Design Adjustments */
+  @media (max-width: 1024px) {
+    .templates-grid {
+      grid-template-columns: repeat(3, 1fr); /* 3 cards per row for medium screens */
+    }
+  
+    .template-card {
+      max-width: 100%; /* Ensures that cards scale with the available space */
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .templates-grid {
+      grid-template-columns: repeat(2, 1fr); /* 2 cards per row for smaller screens */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .templates-grid {
+      grid-template-columns: 1fr; /* 1 card per row for very small screens */
+    }
+  }
+  

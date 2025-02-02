@@ -33,28 +33,6 @@ const Paints = () => {
             );
     }, []);
 
-    const paintTemplates = [
-        {
-            id: 1,
-            name: "Modern Minimalist",
-            image: "https://m.media-amazon.com/images/I/817JTgOSENL._AC_UF1000,1000_QL80_.jpg",
-            pricePerSqFt: 12,
-            description:
-                "Clean lines and subtle tones create a contemporary feel perfect for urban homes.",
-            features: ["Low VOC", "Washable", "Stain Resistant"],
-        },
-        {
-            id: 2,
-            name: "Luxury Metallic",
-            image: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRdWO99GTD_kWiHdyw4XL3dErYKYfCY7B2Rrg&s", // Replace with actual image URL
-            pricePerSqFt: 18,
-            description:
-                "Add glamour with our metallic finish that catches light beautifully.",
-            features: ["Metallic Finish", "Premium Quality", "Long Lasting"],
-        },
-        // Add more templates as needed
-    ];
-
     const handleSelect = (template) => {
         setSelectedTemplate(template);
         setShowModal(true);
@@ -124,32 +102,6 @@ const Paints = () => {
     return (
         <div className="paints-container">
             <h1 className="paints-title">Premium Paint Templates</h1>
-
-            {/* <div className="templates-grid">
-                {paintTemplates.map((template) => (
-                    <div key={template.id} className="template-card">
-                        <div className="template-image">
-                            <img src={template.image} alt={template.name} />
-                        </div>
-                        <div className="template-content">
-                            <h2>{template.name}</h2>
-                            <p className="price">₹{template.pricePerSqFt}/sq.ft</p>
-                            <p className="description">{template.description}</p>
-                            <div className="features">
-                                {template.features.map((feature, index) => (
-                                    <span key={index} className="feature-tag">{feature}</span>
-                                ))}
-                            </div>
-                            <button 
-                                className="select-btn"
-                                onClick={() => handleSelect(template)}
-                            >
-                                Select Template
-                            </button>
-                        </div>
-                    </div>
-                ))}
-            </div> */}
 
             <div className="templates-grid">
                 {templates.map((template) => (

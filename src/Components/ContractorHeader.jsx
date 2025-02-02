@@ -17,10 +17,16 @@ const ContractorHeader = ({ username }) => {
         navigate("/contractor-projects"); // Adjust this path to match your actual route
     };
 
+    const handleLogoNavigate = () => {
+        navigate("/project-type");
+    };
+
     return (
         <nav className="header">
             <div className="logo">
-                <span className="logo-text">ABM</span>
+                <span className="logo-text" onClick={handleLogoNavigate}>
+                    ABM
+                </span>
             </div>
             <div className="profile-container">
                 <button

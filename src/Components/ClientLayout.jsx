@@ -12,7 +12,7 @@ const ClientLayout = ({ children }) => {
             <div>
                 <p>Username: {sessionStorage.getItem("username")}</p>
             </div>
-            <main style={{ paddingTop: "80px" }}>{children}</main>
+            <main style={{ paddingTop: "30px" }}>{children}</main>
         </>
     );
 };
