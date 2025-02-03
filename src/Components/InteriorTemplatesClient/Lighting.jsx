@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import "./Lighting.css";
+import "./Paints.css";
 
 const Lighting = () => {
     const [selectedTemplate, setSelectedTemplate] = useState(null);
@@ -100,24 +100,25 @@ const Lighting = () => {
     };
 
     return (
-        <div className="paints-container">
-            <h1 className="paints-title">Lighting Designs</h1>
-            <div className="templates-grid">
+        <div className="paint-section">
+            <h1 className="paint-header">Premium Paint Templates</h1>
+
+            <div className="template-list">
                 {templates.map((template) => (
-                    <div key={template.id} className="template-card">
-                        <div className="template-image">
+                    <div key={template.id} className="template-item">
+                        <div className="template-image-container">
                             <img src={template.image} alt={template.name} />
                         </div>
-                        <div className="template-content">
+                        <div className="template-details">
                             <h2>{template.name}</h2>
-                            <p className="price">
+                            <p className="template-price">
                                 ₹{template.pricePerSqFt}/sq.ft
                             </p>
-                            <p className="description">
+                            <p className="template-desc">
                                 {template.description}
                             </p>
                             <button
-                                className="select-btn"
+                                className="select-template-btn"
                                 onClick={() => handleSelect(template)}
                             >
                                 Select Design
@@ -130,7 +131,7 @@ const Lighting = () => {
             {/* Square Feet Modal */}
             {showModal && (
                 <div className="modal-overlay">
-                    <div className="modal">
+                    <div className="modal-box">
                         <h2>Enter Area Details</h2>
                         <input
                             type="number"
@@ -146,21 +147,18 @@ const Lighting = () => {
                 </div>
             )}
 
-            {/* Updated Final Price Display */}
+            {/* Final Price Modal */}
             {showFinalPrice && selectedTemplate && (
-                <div className="final-price">
+                <div className="final-price-section">
                     <h3>Total Cost</h3>
-                    <p className="amount">
-                        ₹
-                        {(
-                            selectedTemplate.pricePerSqFt * Number(sqFeet)
-                        ).toFixed(2)}
+                    <p className="final-amount">
+                        ₹{(selectedTemplate.pricePerSqFt * Number(sqFeet)).toFixed(2)}
                     </p>
-                    <p className="details">
+                    <p className="price-details">
                         {sqFeet} sq.ft × ₹{selectedTemplate.pricePerSqFt}/sq.ft
                     </p>
-                    <div className="action-buttons">
-                        <button className="add-to-cart-btn">Add to Cart</button>
+                    <div className="price-action-buttons">
+                        <button className="add-cart-btn">Add to Cart</button>
                         <button className="proceed-btn" onClick={handleProceed}>
                             Proceed
                         </button>
@@ -171,10 +169,10 @@ const Lighting = () => {
             {/* Phone Number Modal */}
             {showPhoneModal && (
                 <div className="phone-modal-overlay">
-                    <div className="phone-modal">
+                    <div className="phone-modal-box">
                         <h2>Almost there! 📱</h2>
                         <p>Please enter your phone number to proceed</p>
-                        <div className="phone-input-container">
+                        <div className="phone-input-group">
                             <input
                                 type="tel"
                                 value={phoneNumber}
@@ -183,17 +181,15 @@ const Lighting = () => {
                                 maxLength="10"
                                 pattern="[0-9]*"
                             />
-                            <div className="input-animation-bar"></div>
+                            <div className="input-bar"></div>
                         </div>
                         {phoneNumber.length < 10 && phoneNumber.length > 0 && (
-                            <p className="error-message">
+                            <p className="phone-error-message">
                                 Please enter a valid 10-digit number
                             </p>
                         )}
                         <button
-                            className={`confirm-btn ${
-                                phoneNumber.length === 10 ? "active" : ""
-                            }`}
+                            className={`confirm-btn ${phoneNumber.length === 10 ? "active" : ""}`}
                             onClick={handlePhoneSubmit}
                             disabled={phoneNumber.length !== 10}
                         >
@@ -206,9 +202,9 @@ const Lighting = () => {
             {/* Success Modal */}
             {showSuccessModal && (
                 <div className="success-modal-overlay">
-                    <div className="success-modal">
+                    <div className="success-modal-box">
                         <div className="success-icon">✓</div>
-                        <h2>Request Submitted</h2>
+                        <h2>Design Added!</h2>
                         <p>Thank you</p>
                     </div>
                 </div>
