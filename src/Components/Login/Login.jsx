@@ -22,9 +22,9 @@ const Login = () => {
 
     // Handle form submission
     const handleSubmit = (e) => {
-        e.preventDefault();
         console.log("Login attempted with:", formData);
 
+        e.preventDefault();
         const requestBody = {
             username: formData.username,
             password: formData.password,
@@ -40,7 +40,7 @@ const Login = () => {
         })
             .then((response) => {
                 if (!response.ok) {
-                    alert("Login Failed");
+                    //alert("Login Failed");
                     throw new Error("Login Failed");
                 }
                 return response.json();
@@ -57,20 +57,31 @@ const Login = () => {
                         sessionStorage.setItem("userRole", roleName);
                         sessionStorage.setItem("username", username);
                         sessionStorage.setItem("userid", userId);
+                        // Navigate based on role
+                        if (roleName === "CONTRACTOR") {
+                            console.log("Logged in as Contractor");
+                            navigate("/project-type");
+                        } else if (roleName === "CLIENT") {
+                            console.log("Logged in as Client");
+                            navigate("/project-type-client");
+                        } else {
+                            console.error("Unknown role:", roleName);
+                        }
                     })
                     .catch((error) => {
                         console.error("Error:", error); // handle any errors
                     });
 
-                // Navigate based on role
-                if (roleName === "CONTRACTOR") {
-                    console.log("Logged in as Contractor");
-                    navigate("/project-type");
-                } else if (roleName === "CLIENT") {
-                    navigate("/project-type-client");
-                } else {
-                    console.error("Unknown role:", roleName);
-                }
+                // // Navigate based on role
+                // if (roleName === "CONTRACTOR") {
+                //     console.log("Logged in as Contractor");
+                //     navigate("/project-type");
+                // } else if (roleName === "CLIENT") {
+                //     console.log("Logged in as Client");
+                //     navigate("/project-type-client");
+                // } else {
+                //     console.error("Unknown role:", roleName);
+                // }
             })
             .catch((error) => {
                 console.error("Login error:", error);
