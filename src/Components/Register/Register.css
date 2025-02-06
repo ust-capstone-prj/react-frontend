@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    background-image: url('C:\Users\Administrator\Desktop\React-apply\react-frontend-1\src\assets\Registrationimg.png.avif'); /* Add your image path here */
+    background-image: url('src/assets/LoginImg.jpg');    
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;

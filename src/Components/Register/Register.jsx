@@ -1,57 +1,57 @@
-import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import './Register.css';
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import "./Register.css";
 
 const Register = () => {
     const navigate = useNavigate();
     // Initialize state for form data
     const [formData, setFormData] = useState({
-        firstName: '',
-        lastName: '',
-        email: '',
-        username: '',
-        password: '',
-        userType: '1', // default value
-        companyName: '',
+        firstName: "",
+        lastName: "",
+        email: "",
+        username: "",
+        password: "",
+        userType: "1", // default value
+        companyName: "",
     });
 
     // Handle input changes
     const handleChange = (e) => {
         const { name, value } = e.target;
-        setFormData(prevState => ({
+        setFormData((prevState) => ({
             ...prevState,
-            [name]: value
+            [name]: value,
         }));
     };
 
     // Handle form submission
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log('Registration attempted with FormData:', formData);
+        console.log("Registration attempted with FormData:", formData);
 
         const requestBody1 = {
             username: formData.username,
             password: formData.password,
-            roleId: formData.userType
-        }
-        console.log(requestBody1)
+            roleId: formData.userType,
+        };
+        console.log(requestBody1);
 
         fetch("http://localhost:8060/api/auth/register", {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json",
             },
-            body: JSON.stringify(requestBody1)
+            body: JSON.stringify(requestBody1),
         })
             .then((response) => {
                 if (!response.ok) {
-                    alert("Registration Failed")
+                    //alert("Registration Failed");
                     throw new Error("Registration Failed");
                 }
                 return response.json();
             })
             .then((data) => {
-                console.log('Response Data: ', data)
+                console.log("Response Data: ", data);
                 const { userId, username, password, roleId } = data;
 
                 const requestbody2 = {
@@ -59,31 +59,31 @@ const Register = () => {
                     userFirstName: formData.firstName,
                     userLastName: formData.lastName,
                     userEmail: formData.email,
-                    userCompany: formData.companyName
-                }
+                    userCompany: formData.companyName,
+                };
 
-                console.log("Request Body 2: ", requestbody2)
+                console.log("Request Body 2: ", requestbody2);
                 fetch("http://localhost:8060/api/userdetails", {
                     method: "POST",
                     headers: {
-                        'Content-Type': 'application/json'
+                        "Content-Type": "application/json",
                     },
-                    body: JSON.stringify(requestbody2)
+                    body: JSON.stringify(requestbody2),
                 })
                     .then((response) => {
                         if (!response.ok) {
-                            alert("Failed to add user details")
+                            //alert("Failed to add user details");
                             throw new Error("Failed to add user details");
                         }
                         return response.json();
                     })
                     .then((data) => {
                         // console.log(data)
-                        console.log("successfully registered user.")
-                        alert("Registration Successful. Please Login")
-                        navigate('/login')
-                    })
-            })
+                        console.log("successfully registered user.");
+                        //alert("Registration Successful. Please Login")
+                        navigate("/login");
+                    });
+            });
     };
 
     return (
@@ -172,7 +172,7 @@ const Register = () => {
                     </select>
                 </div>
 
-                {formData.userType === '2' && (
+                {formData.userType === "2" && (
                     <>
                         <div className="form-group">
                             <label htmlFor="companyName">Company Name</label>
@@ -199,4 +199,4 @@ const Register = () => {
     );
 };
 
-export default Register; 
+export default Register;
