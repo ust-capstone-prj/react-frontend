@@ -36,10 +36,6 @@ const ContractorStats = () => {
                         const { sqftArea, projectTypeCategoryVariationId } =
                             project;
 
-                        console.log(
-                            "project id: ",
-                            projectTypeCategoryVariationId
-                        );
                         // Fetch cost breakdown for each project's category variation
                         const costResponse = await fetch(
                             `http://localhost:8060/api/projectcosts/variation/${projectTypeCategoryVariationId}`
@@ -149,13 +145,13 @@ const ContractorStats = () => {
 
                 <div className="stats-container-admin">
                     {/* Card for Number of Clients */}
-                    <div className="card-admin">
+                    <div className="card-admin card-client">
                         <h2>Total Clients</h2>
                         <p>{clientsCount}</p>
                     </div>
 
                     {/* Pie Chart for Approved vs Unapproved Projects */}
-                    <div className="chart-card-admin">
+                    <div className="card-admin chart-card-admin">
                         <h3>Project Approval Status</h3>
                         <div className="pie-chart-container-admin">
                             <Pie data={projectApprovalChart} />
@@ -163,13 +159,17 @@ const ContractorStats = () => {
                     </div>
 
                     {/* Cost Analysis Card */}
-                    <div className="card-admin">
+                    <div className="card-admin card-cost-analysis">
                         <h2>Cost Analysis</h2>
-                        <p>
+                        <p className="cost-item">
                             Total Material Cost: ${totalMaterialCost.toFixed(2)}
                         </p>
-                        <p>Total Labour Cost: ${totalLabourCost.toFixed(2)}</p>
-                        <p>Total Profit Cost: ${totalProfitCost.toFixed(2)}</p>
+                        <p className="cost-item">
+                            Total Labour Cost: ${totalLabourCost.toFixed(2)}
+                        </p>
+                        <p className="cost-item">
+                            Total Profit Cost: ${totalProfitCost.toFixed(2)}
+                        </p>
                     </div>
                 </div>
             </div>
