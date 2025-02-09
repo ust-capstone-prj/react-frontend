@@ -121,3 +121,89 @@
         grid-template-columns: 1fr; /* 1 card per row */
     }
 }
+
+/* Edit Project Form Modal Style */
+.edit-project-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 20; /* Ensure it appears above other content */
+  }
+  
+  /* Edit Form Card */
+  .edit-project-form {
+    background-color: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    width: 400px; /* Fixed width */
+    max-width: 100%; /* Ensures responsiveness */
+    transition: transform 0.3s ease;
+    transform: translateY(-50px); /* Initially shifted up */
+  }
+  
+  /* Edit Form Card On Screen */
+  .edit-project-form.show {
+    transform: translateY(0); /* Moves the card into place */
+  }
+  
+  /* Title for the Edit Form */
+  .edit-project-form h3 {
+    font-size: 1.8rem;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  /* Input Fields */
+  .edit-project-form input {
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 1rem;
+    width: 100%;
+    margin-bottom: 15px;
+  }
+  
+  /* Input Focus Effect */
+  .edit-project-form input:focus {
+    border-color: #4CAF50;
+    outline: none;
+  }
+  
+  /* Button Styling */
+  .edit-project-form button {
+    padding: 10px;
+    border-radius: 4px;
+    border: none;
+    font-size: 1rem;
+    cursor: pointer;
+    width: 100%;
+    color: white;
+    margin-bottom: 10px;
+  }
+  
+  .edit-project-form .save-btn {
+    background-color: #4CAF50;
+  }
+  
+  .edit-project-form .cancel-btn {
+    background-color: #f44336;
+    margin-top: 10px;
+  }
+  
+  /* Button Hover Effects */
+  .edit-project-form .save-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .edit-project-form .cancel-btn:hover {
+    background-color: #e53935;
+  }
+  
