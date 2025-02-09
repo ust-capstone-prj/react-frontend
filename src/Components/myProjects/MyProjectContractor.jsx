@@ -125,12 +125,15 @@ const MyProjectContractor = () => {
 
     return (
         <ContractorLayout>
-            <div className="projects-contractor">
-                <h1 className="projects-title">Client Projects</h1>
-                <div className="templates-list">
+            <div className="projects-contractor-cont">
+                <h1 className="projects-title-cont">Client Projects</h1>
+                <div className="templates-list-cont">
                     {projects.map((project) => (
-                        <div key={project.projectId} className="template-card">
-                            <div className="template-image">
+                        <div
+                            key={project.projectId}
+                            className="template-card-cont"
+                        >
+                            <div className="template-image-cont">
                                 {projectInfo[project.projectId] && (
                                     <img
                                         src={
@@ -144,14 +147,14 @@ const MyProjectContractor = () => {
                                     />
                                 )}
                             </div>
-                            <div className="template-details">
+                            <div className="template-details-cont">
                                 <h3>
                                     {
                                         projectInfo[project.projectId]
                                             ?.projTypCatVarName
                                     }
                                 </h3>
-                                <p className="sqft-area">
+                                <p className="sqft-area-cont">
                                     Area: {project.sqftArea} sqft
                                 </p>
 
@@ -159,14 +162,14 @@ const MyProjectContractor = () => {
                                     onClick={() =>
                                         toggleClientDetails(project.projectId)
                                     }
-                                    className="client-details-btn"
+                                    className="client-details-btn-cont"
                                 >
                                     Client Details
                                 </button>
                                 {showDetails[project.projectId] &&
                                     userDetails[project.projectId] && (
                                         <div
-                                            className={`user-details ${
+                                            className={`user-details-cont ${
                                                 showDetails[project.projectId]
                                                     ? "show"
                                                     : ""
@@ -200,14 +203,14 @@ const MyProjectContractor = () => {
                                     onClick={() =>
                                         toggleViewCosts(project.projectId)
                                     }
-                                    className="view-costs-btn"
+                                    className="view-costs-btn-cont"
                                 >
                                     View Costs
                                 </button>
                                 {showCosts[project.projectId] &&
                                     projectCosts[project.projectId] && (
                                         <div
-                                            className={`project-costs ${
+                                            className={`project-costs-cont ${
                                                 showCosts[project.projectId]
                                                     ? "show"
                                                     : ""
@@ -243,7 +246,7 @@ const MyProjectContractor = () => {
                                     onClick={() =>
                                         approveProject(project.projectId)
                                     }
-                                    className="approve-btn"
+                                    className="approve-btn-cont"
                                     disabled={isApproved[project.projectId]}
                                 >
                                     {isApproved[project.projectId]
