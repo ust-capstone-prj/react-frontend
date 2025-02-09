@@ -27,6 +27,7 @@ import Renovation from "./Components/constructionTemplatesClient/Renovation";
 import ClientLayout from "./components/ClientLayout";
 import MyProjectClient from "./Components/myProjects/MyProjectClient";
 import MyProjectContractor from "./Components/myProjects/MyProjectContractor";
+import ContractorStats from "./Components/Stats/ContractorStats";
 
 // Protected Route Component with role check
 const ProtectedRoute = ({ children, allowedRoles }) => {
@@ -61,6 +62,14 @@ function App() {
                         element={
                             <ProtectedRoute allowedRoles={["CONTRACTOR"]}>
                                 <ProjectType />
+                            </ProtectedRoute>
+                        }
+                    />
+                    <Route
+                        path="/stats"
+                        element={
+                            <ProtectedRoute allowedRoles={["CONTRACTOR"]}>
+                                <ContractorStats />
                             </ProtectedRoute>
                         }
                     />
